@@ -15,6 +15,9 @@ app.use(cors({
 app.use(express.json());
 
 app.use('/api/auth', authRoutes);
+app.use('/api/dashboard', authRoutes);
+
+
 
 app.use((err, req, res, next) => {
   console.error(err.stack);
