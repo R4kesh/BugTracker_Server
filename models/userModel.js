@@ -18,7 +18,7 @@ const User = db.define('User', {
         allowNull: false,
     },
     role: {
-        type: DataTypes.ENUM('admin', 'designer', 'developer','projectManager'),
+        type: DataTypes.ENUM('admin', 'designer', 'developer', 'projectManager'),
         allowNull: false,
     },
     phoneNumber: {
@@ -26,16 +26,30 @@ const User = db.define('User', {
         allowNull: true,
     },
     isApproved: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: false,
-      allowNull: false,
-  },
-  isVerified: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: false, 
-      allowNull: false,
-  },
-
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+        allowNull: false,
+    },
+    isVerified: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false, 
+        allowNull: false,
+    },
+    // New fields
+    isBlocked: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,  // Default value set to false
+        allowNull: false,
+    },
+    otp: {
+        type: DataTypes.INTEGER,
+        allowNull: true,  // Allow NULL initially until OTP is generated
+    },
+    otpExpires: {
+        type: DataTypes.DATE,
+        defaultValue: () => new Date(Date.now() + 30 * 1000),  // Default expiration time: 30 seconds from now
+        allowNull: true,
+    },
 });
 
 
@@ -52,7 +66,7 @@ const syncUserTable = async () => {
 syncUserTable();
 
 // Create User function using Sequelize
-export const createUser = async (name, email, password, role, phoneNumber) => {
+export const createUser = async (name, email, password, role, phoneNumber,otp) => {
     try {
         const user = await User.create({
             name,
@@ -62,6 +76,9 @@ export const createUser = async (name, email, password, role, phoneNumber) => {
             phoneNumber,
             isApproved: false, 
             isVerified: false,
+            isBlocked: false, 
+            otp,         
+            otpExpires: new Date(Date.now() + 30 * 1000),  
         });
         return user; 
     } catch (error) {
