@@ -52,6 +52,8 @@ const User = db.define('User', {
     },
 });
 
+export default User;
+
 
 const syncUserTable = async () => {
     try {
@@ -97,3 +99,5 @@ export const getUserByEmail = async (email) => {
         throw error; 
     }
 };
+
+
