@@ -19,8 +19,6 @@ export const getDasboardCount = async (req, res) => {
       });
 
     
-
-
       
       return res.status(200).json({ userRequestCount,activeUserCount });  
     } catch (error) {
@@ -48,9 +46,20 @@ try {
 
 export const approveUser = async (req, res) => {
   try {
-    console.log('controller');
-    
+    const userId = req.params.id;
+
+    const updatedUser = await User.update(
+      { isApproved: true }, 
+      { where: { id: userId } } 
+    );
+
+    if (updatedUser[0] === 1) {
+      res.status(200).json({ success: true, message: 'User approved successfully' });
+    } else {
+      res.status(404).json({ success: false, message: 'User not found or already approved' });
+    }
   } catch (error) {
-    
+    console.error('Error approving user:', error);
+    res.status(500).json({ success: false, message: 'Server error' });
   }
 }

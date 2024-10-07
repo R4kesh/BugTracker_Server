@@ -79,34 +79,53 @@ export const loginUser = async (req, res) => {
             return res.status(400).json({ message: 'Invalid credentials' });
         }
 
+        if (user.role !== role) {
+            return res.status(403).json({ message: 'User role mismatch. Please select the correct role.' });
+          }
+
         // Compare password
-        const isMatch = await bcrypt.compare(password, user.password);
-        if (!isMatch) {
+        if (!user.isVerified) {
+            return res.status(400).json({ message: 'Please sign up and verify your identity.' });
+          }
+    
+          // Check if the user is approved
+          if (!user.isApproved) {
+            return res.status(403).json({ message: 'Your team manager is not verified. Please wait or contact support.' });
+          }
+    
+          // Check if the user is blocked
+          if (user.isBlocked) {
+            return res.status(403).json({ message: 'You have been blocked. Please contact your team manager.' });
+          }
+
+          
+    
+          // Check if password matches
+          const isMatch = await bcrypt.compare(password, user.password);
+          if (!isMatch) {
             return res.status(400).json({ message: 'Invalid credentials' });
-        }
-
-        // Create JWT payload
-        const payload = {
+          }
+    
+          // Create JWT payload
+          const payload = {
             user: {
-                id: user.id,
-                role: user.role,
+              id: user.id,
+              role: user.role,
             },
-        };
-
-        // Generate token
-        const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
-        console.log('jw2',jwt);
-        return res.status(200).json({
+          };
+    
+          // Generate token
+          const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
+          return res.status(200).json({
             token,
             user: {
-                id: user.id,
-                name: user.name,
-                email: user.email,
-                role: user.role,
+              id: user.id,
+              name: user.name,
+              email: user.email,
+              role: user.role,
             },
-        });
-
-    }
+          });
+        }
     } catch (error) {
         console.error(error);
         return res.status(500).json({ message: 'Server error' });
