@@ -35,19 +35,19 @@ const User = db.define('User', {
         defaultValue: false, 
         allowNull: false,
     },
-    // New fields
+    
     isBlocked: {
         type: DataTypes.BOOLEAN,
-        defaultValue: false,  // Default value set to false
+        defaultValue: false,  
         allowNull: false,
     },
     otp: {
         type: DataTypes.INTEGER,
-        allowNull: true,  // Allow NULL initially until OTP is generated
+        allowNull: true, 
     },
     otpExpires: {
         type: DataTypes.DATE,
-        defaultValue: () => new Date(Date.now() + 30 * 1000),  // Default expiration time: 30 seconds from now
+        defaultValue: () => new Date(Date.now() + 30 * 1000), 
         allowNull: true,
     },
 });
@@ -67,7 +67,7 @@ const syncUserTable = async () => {
 
 syncUserTable();
 
-// Create User function using Sequelize
+
 export const createUser = async (name, email, password, role, phoneNumber,otp) => {
     try {
         const user = await User.create({
@@ -88,7 +88,7 @@ export const createUser = async (name, email, password, role, phoneNumber,otp) =
     }
 };
 
-// Get User by email function using Sequelize
+
 export const getUserByEmail = async (email) => {
     try {
         const user = await User.findOne({
