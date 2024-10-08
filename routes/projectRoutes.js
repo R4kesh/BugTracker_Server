@@ -9,7 +9,7 @@ router.get('/display',displayProject)
 router.get('/getProjectName/:id',getProjectName)
 router.post('/task/create',taskCreation)
 router.get('/task/getAll',taskList)
-router.post('/task/getModalData',)
+// router.post('/task/getModalData',)
 
 
 
