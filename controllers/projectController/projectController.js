@@ -92,3 +92,16 @@ export const taskCreation = async (req, res) => {
         
     }
 }
+
+export const taskList = async (req, res) => {
+    try {
+        console.log('log');
+        const tasks = await Task.findAll(); // Fetch all tasks from the database
+    res.status(200).json(tasks);
+        
+    } catch (error) {
+        console.error('Error fetching tasks:', error);
+    res.status(500).json({ error: 'Failed to fetch tasks' });
+        
+    }
+}
