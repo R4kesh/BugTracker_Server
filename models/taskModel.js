@@ -2,7 +2,8 @@
 import { DataTypes } from 'sequelize';
 import db from '../config/db.js';
 import Project from './projectModel.js';
-import User from './userModel.js'; 
+import User from './userModel.js';
+ 
 
 const Task = db.define('Task', {
     projectName: {
@@ -31,7 +32,7 @@ const Task = db.define('Task', {
     type: DataTypes.INTEGER,
     allowNull: true,
     references: {
-      model: User, 
+      model: 'User', 
       key: 'id',
     },
   },
@@ -44,6 +45,10 @@ const Task = db.define('Task', {
     allowNull: true, 
   },
 });
+
+export const associate = (models) => {
+  Task.belongsTo(User, { foreignKey: 'assigned', as: 'assignedUser' });
+};
 
 export default Task;
 

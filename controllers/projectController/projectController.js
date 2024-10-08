@@ -88,8 +88,17 @@ export const taskList = async (req, res) => {
     try {
         const { projectId } = req.params;
         console.log('id',projectId);
-        const tasks = await Task.findAll({ where: { projectId } });
-        console.log('tasks',tasks);
+        const tasks = await Task.findAll({
+            where: { projectId },
+            include: [
+                {
+                    model: User,
+                    as: 'assignedUser', 
+                    attributes: ['name'], 
+                },
+            ],
+        });
+        
         
     res.status(200).json(tasks);
         

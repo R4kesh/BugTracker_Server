@@ -1,6 +1,7 @@
 // server/models/userModel.js
 import { DataTypes } from 'sequelize';
 import db from '../config/db.js';
+import Task from '../models/taskModel.js'
 
 
 const User = db.define('User', {
@@ -51,6 +52,8 @@ const User = db.define('User', {
         allowNull: true,
     },
 });
+
+User.hasMany(Task, { foreignKey: 'assigned' });
 
 export default User;
 
