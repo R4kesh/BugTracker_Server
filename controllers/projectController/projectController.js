@@ -95,7 +95,7 @@ export const taskCreation = async (req, res) => {
 
 export const taskList = async (req, res) => {
     try {
-        console.log('log');
+       
         const tasks = await Task.findAll(); // Fetch all tasks from the database
     res.status(200).json(tasks);
         
@@ -105,3 +105,5 @@ export const taskList = async (req, res) => {
         
     }
 }
+
+
