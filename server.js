@@ -10,6 +10,7 @@ import sequelize from './config/db.js';
 import User from './models/suserModel.js'
 import Task, { associateTask } from './models/taskModel.js'
 import Project, { associateProject } from './models/projectModel.js';
+import TestCase,{associateTestCase} from './models/testCasesModel.js';
 
 
 dotenv.config();
@@ -44,8 +45,9 @@ const syncModels = async () => {
 
         // associateTask({ User }); 
        
-        associateTask({ Project, User });
+        associateTask({ Project, User , TestCase });
         associateProject({ Task }); 
+        associateTestCase({ Task });
     } catch (error) {
         console.error('Error syncing models:', error);
     }
