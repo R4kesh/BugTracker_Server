@@ -40,10 +40,24 @@ const Task = db.define('Task', {
         type: DataTypes.DATE,
         allowNull: true,
     },
-    isVerified: {
+    isVerifiedByAdmin: {
       type: DataTypes.BOOLEAN,
       defaultValue: false, 
       allowNull: false,
+  },
+  isVerifiedByUser: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false, 
+    allowNull: false,
+},
+  isCompleted: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false, 
+    allowNull: false,
+},
+status: {
+    type: DataTypes.ENUM('pending', 'started', 'in-Progress', 'completed'),
+    allowNull: false,
   },
    
 });

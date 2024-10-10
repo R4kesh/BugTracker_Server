@@ -5,10 +5,12 @@ import authRoutes from './routes/authRoutes.js';
 import dashboardRoutes from './routes/dashboardRoutes.js'
 import projectRoutes from './routes/projectRoutes.js'
 import userDashboardRoutes from './routes/userDashboardRoutes.js'
+import testerDashboard from './routes/testerDashboardRoutes.js'
 import sequelize from './config/db.js';
 import User from './models/suserModel.js'
 import Task, { associateTask } from './models/taskModel.js'
 import Project, { associateProject } from './models/projectModel.js';
+
 
 dotenv.config();
 
@@ -24,6 +26,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/project', projectRoutes);
 app.use('/api/userDashboard',userDashboardRoutes)
+app.use('/api/tester',testerDashboard)
 
 
 

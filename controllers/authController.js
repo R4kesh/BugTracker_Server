@@ -29,7 +29,7 @@ export const registerUser = async (req, res) => {
 
         return res.status(201).json(newUser);
     } catch (error) {
-        console.error(error);
+        console.error('error at signup',error);
         return res.status(500).json({ message: 'Server error' });
     }
 };

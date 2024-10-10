@@ -1,6 +1,7 @@
 import Project from '../../models/projectModel.js'
 import Task from '../../models/taskModel.js'
 import User from '../../models/suserModel.js'
+import { Op } from 'sequelize';
 
 
 export const addProject = async (req, res) => {
@@ -162,6 +163,10 @@ export const assignTo  = async (req, res) => {
 export const assignedList = async (req, res) => {
     try {
         const tasks = await Task.findAll({
+            where: {
+                assigned: { [Op.ne]: null }  // Filter to exclude tasks with 'assigned' as NULL
+            },
+            
             include: [
                 { model: Project },  // Include associated Project
                 { model: User, as: 'assignedUser' },  // Include associated User (assigned)
