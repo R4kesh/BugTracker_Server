@@ -1,6 +1,6 @@
 import Project from '../../models/projectModel.js'
 import Task from '../../models/taskModel.js'
-import User from '../../models/userModel.js'
+import User from '../../models/suserModel.js'
 
 
 export const addProject = async (req, res) => {
@@ -65,6 +65,7 @@ export const getProjectName = async (req, res) => {
 
 export const taskCreation = async (req, res) => {
     try {
+        console.log('loggggg',req.body);
         const { projectName, taskName, description, projectId } = req.body;
         const newTask = await Task.create({
             projectName,
@@ -87,7 +88,7 @@ export const taskCreation = async (req, res) => {
 export const taskList = async (req, res) => {
     try {
         const { projectId } = req.params;
-        console.log('id',projectId);
+       
         const tasks = await Task.findAll({
             where: { projectId },
             include: [
@@ -143,19 +144,57 @@ export const assignTo  = async (req, res) => {
             return res.status(404).json({ message: 'Task not found' });
         }
 
-        // Update the task fields
-        task.assigned = assignedTo || task.assigned; // Only update if a new value is provided
-        task.starting = dueDate ? new Date(dueDate) : task.starting; // Update only if dueDate is provided
-        task.deadline = deadlineDate ? new Date(deadlineDate) : task.deadline; // Update only if deadlineDate is provided
+       
+        task.assigned = assignedTo || task.assigned; 
+        task.starting = dueDate ? new Date(dueDate) : task.starting; 
+        task.deadline = deadlineDate ? new Date(deadlineDate) : task.deadline; 
 
-        // Save the updated task
         await task.save();
-
-        // Respond with the updated task
+ 
         res.status(200).json(task);
     } catch (error) {
         console.error('Error updating task:', error);
         res.status(500).json({ message: 'Server error' });
+    }
+}
+
+
+export const assignedList = async (req, res) => {
+    try {
+        const tasks = await Task.findAll({
+            include: [
+                { model: Project },  // Include associated Project
+                { model: User, as: 'assignedUser' },  // Include associated User (assigned)
+            ],
+        });
+        res.status(200).json(tasks);
+        
+    } catch (error) {
+        console.error('Error fetching tasks:', error);
+        res.status(500).json({ message: 'Failed to fetch tasks' });
+        
+    }
+}
+
+ 
+export const  assignedListStatus = async (req, res) => {
+    try {
+        const { taskId } = req.params;
+        const { isVerified } = req.body;
+
+        const task = await Task.findByPk(taskId);
+        if (!task) {
+          return res.status(404).json({ message: 'Task not found' });
+        }
+    
+        task.isVerified = isVerified; // Update the isVerified status
+        await task.save(); // Save the changes to the database
+    
+        res.status(200).json({ message: 'Task verification status updated', task });
+        
+    } catch (error) {
+        console.error('Error updating task verification:', error);
+        res.status(500).json({ message: 'Internal server error' });
     }
 }
 

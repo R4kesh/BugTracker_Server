@@ -1,4 +1,4 @@
-import { createUser, getUserByEmail } from '../models/userModel.js';
+import { createUser, getUserByEmail } from '../models/suserModel.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import {generateOtp,sendOtpEmail} from '../utils/otp.js'

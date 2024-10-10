@@ -4,9 +4,11 @@ import dotenv from 'dotenv';
 import authRoutes from './routes/authRoutes.js'; 
 import dashboardRoutes from './routes/dashboardRoutes.js'
 import projectRoutes from './routes/projectRoutes.js'
+import userDashboardRoutes from './routes/userDashboardRoutes.js'
 import sequelize from './config/db.js';
-import User from './models/userModel.js'
-import Task, { associate as associateTask } from './models/taskModel.js'
+import User from './models/suserModel.js'
+import Task, { associateTask } from './models/taskModel.js'
+import Project, { associateProject } from './models/projectModel.js';
 
 dotenv.config();
 
@@ -21,6 +23,7 @@ app.use(express.json());
 app.use('/api/auth', authRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/project', projectRoutes);
+app.use('/api/userDashboard',userDashboardRoutes)
 
 
 
@@ -36,7 +39,10 @@ const syncModels = async () => {
         await sequelize.sync();
         console.log('Database models synced successfully');
 
-        associateTask({ User }); 
+        // associateTask({ User }); 
+       
+        associateTask({ Project, User });
+        associateProject({ Task }); 
     } catch (error) {
         console.error('Error syncing models:', error);
     }

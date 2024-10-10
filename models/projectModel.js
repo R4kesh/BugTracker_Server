@@ -2,6 +2,7 @@ import { DataTypes } from 'sequelize';
 import db from '../config/db.js';
 
 
+
 const Project = db.define('Project', {
     name: {
       type: DataTypes.STRING,
@@ -22,6 +23,12 @@ const Project = db.define('Project', {
   });
 
   export default Project;
+
+  export const associateProject = (models) => {
+    Project.hasMany(models.Task, { foreignKey: 'projectId' });
+};
+
+
 
   const syncProjectTable = async () => {
     try {

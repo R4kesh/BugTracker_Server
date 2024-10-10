@@ -1,4 +1,4 @@
-// server/config/database.js
+
 import { Sequelize } from 'sequelize';
 import dotenv from 'dotenv';
 
@@ -19,7 +19,6 @@ const testConnection = async () => {
         console.error('Unable to connect to the database:', error);
     }
 };
-
 
 testConnection();
 
