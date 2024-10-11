@@ -72,7 +72,12 @@ export const dashboardCount  = async (req, res) => {
 
 export const  listTestCases = async (req, res) => {
   try {
-    const testCases = await TestCase.findAll();
+    console.log('jhjh',req.params.id);
+    const testCases = await TestCase.findAll({
+      where: {
+        taskId: req.params.id  
+      }
+    });
     console.log('te',testCases);
     res.json(testCases);
     
@@ -92,15 +97,13 @@ export const  testCaseCreation  = async (req, res) => {
 
     const { id } = req.params;
     const taskId=id
-  const { name, description } = req.body;
-  const task = await Task.findByPk(id);
-    if (!task) {
-      return res.status(404).json({ message: 'Task not found' });
-    }
+  const { name, description, steps } = req.body;
+  
 
     const testCase = await TestCase.create({
       name,
       description,
+      steps,
       taskId, // Associate the test case with the task
     });
 

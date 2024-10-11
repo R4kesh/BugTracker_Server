@@ -8,7 +8,7 @@ const router = express.Router();
 router.get('/listTasks',listAllTasks)
 router.get('/dashboardCount',dashboardCount)
 router.post('/testCaseCreation/:id',testCaseCreation)
-router.get('/listTestCases',listTestCases)
+router.get('/listTestCases/:id',listTestCases)
 
 
 export default router; 

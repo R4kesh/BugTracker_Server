@@ -20,6 +20,10 @@ const TestCase = db.define('TestCase', {
         key: 'id',
     },
 },
+steps: {
+  type: DataTypes.JSON, 
+  allowNull: true,
+},
   severity: {
     type: DataTypes.ENUM('High', 'Medium', 'Low'),
     allowNull: true,  // Or provide a default value like:
