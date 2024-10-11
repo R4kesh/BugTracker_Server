@@ -10,8 +10,30 @@ const TestCase = db.define('TestCase', {
   },
   description: {
     type: DataTypes.TEXT,
-    allowNull: false,
+    allowNull: true,
   },
+  taskId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,  // Make sure the type matches the corresponding field
+    references: {
+        model: 'Tasks', // The table your `taskId` relates to
+        key: 'id',
+    },
+},
+  severity: {
+    type: DataTypes.ENUM('High', 'Medium', 'Low'),
+    allowNull: true,  // Or provide a default value like:
+        defaultValue: 'low',
+  },
+  testStatus: {
+    type: DataTypes.STRING,
+    allowNull: true,  // Or provide a default value:
+    defaultValue: 'pending', 
+  },
+  fileLink: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  }
 });
 
 // Association with Task
@@ -24,7 +46,7 @@ export default TestCase;
 // Sync function for TestCase
 const syncTestCaseTable = async () => {
   try {
-    await TestCase.sync();
+    await TestCase.sync({ force: true });
     console.log('TestCase table created or exists already');
   } catch (error) {
     console.error('Error creating TestCase table:', error);

@@ -43,11 +43,12 @@ const syncModels = async () => {
         await sequelize.sync();
         console.log('Database models synced successfully');
 
-        // associateTask({ User }); 
+       
        
         associateTask({ Project, User , TestCase });
         associateProject({ Task }); 
         associateTestCase({ Task });
+       
     } catch (error) {
         console.error('Error syncing models:', error);
     }

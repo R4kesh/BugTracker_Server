@@ -1,6 +1,7 @@
 import Task from '../../models/taskModel.js'
 import Project from '../../models/projectModel.js'
 import User from '../../models/suserModel.js';
+import TestCase from '../../models/testCasesModel.js';
 import { Op } from 'sequelize'; 
 
 
@@ -69,17 +70,46 @@ export const dashboardCount  = async (req, res) => {
   }
 }
 
+export const  listTestCases = async (req, res) => {
+  try {
+    const testCases = await TestCase.findAll();
+    console.log('te',testCases);
+    res.json(testCases);
+    
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error fetching test cases' });
+    
+  }
+}
+
+
 
 export const  testCaseCreation  = async (req, res) => {
   try {
     console.log('test',req.body);
     console.log('testParams',req.params);
 
-    const { taskId } = req.params;
+    const { id } = req.params;
+    const taskId=id
   const { name, description } = req.body;
+  const task = await Task.findByPk(id);
+    if (!task) {
+      return res.status(404).json({ message: 'Task not found' });
+    }
+
+    const testCase = await TestCase.create({
+      name,
+      description,
+      taskId, // Associate the test case with the task
+    });
+
+    res.status(201).json(testCase);
 
     
   } catch (error) {
+    console.error('Error creating test case:', error);
+    res.status(500).json({ message: 'Error creating test case' });
     
   }
 }
