@@ -21,7 +21,7 @@ export const listAllTasks  = async (req, res) => {
               },
             ],
           });
-          console.log('hgvd',tasks);
+          
       
           res.json(tasks);
         
@@ -50,10 +50,7 @@ export const dashboardCount  = async (req, res) => {
     const tasksTestedCompletedCount = await Task.count({
       where: { isVerifiedByAdmin: true },
     });
-    console.log('new',newTasksCount);
-    console.log('new1',taskToTestCount);
-    console.log('new2',tasksTestedCompletedCount);
-
+    
 
 
     // Return the counts as a response
@@ -78,7 +75,7 @@ export const  listTestCases = async (req, res) => {
         taskId: req.params.id  
       }
     });
-    console.log('te',testCases);
+   
     res.json(testCases);
     
   } catch (error) {
@@ -113,6 +110,18 @@ export const  testCaseCreation  = async (req, res) => {
   } catch (error) {
     console.error('Error creating test case:', error);
     res.status(500).json({ message: 'Error creating test case' });
+    
+  }
+}
+
+export const updateBugReport  = async (req, res) => {
+  try {
+    console.log('g');
+    console.log('req',req.body);
+    
+  } catch (error) {
+    console.error('Error creating bug report:', error);
+    res.status(500).json({ message: 'Internal server error', error: error.message });
     
   }
 }

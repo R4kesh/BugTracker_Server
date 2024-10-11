@@ -45,10 +45,10 @@ export const associateTestCase = (models) => {
   TestCase.belongsTo(models.Task, { foreignKey: 'taskId' }); // Each test case belongs to a specific task
 };
 
-export default TestCase;
+// export default TestCase;
 
 // Sync function for TestCase
-const syncTestCaseTable = async () => {
+export const syncTestCaseTable = async () => {
   try {
     await TestCase.sync({ force: true });
     console.log('TestCase table created or exists already');
@@ -58,3 +58,5 @@ const syncTestCaseTable = async () => {
 };
 
 syncTestCaseTable();
+
+export default TestCase;

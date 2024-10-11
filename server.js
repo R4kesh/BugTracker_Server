@@ -11,7 +11,8 @@ import User from './models/suserModel.js'
 import Task, { associateTask } from './models/taskModel.js'
 import Project, { associateProject } from './models/projectModel.js';
 import TestCase,{associateTestCase} from './models/testCasesModel.js';
-
+import { syncTestCaseTable } from './models/testCasesModel.js';
+import { associateBugReport, syncBugReportTable } from './models/bugReportModel.js';
 
 dotenv.config();
 
@@ -48,11 +49,20 @@ const syncModels = async () => {
         associateTask({ Project, User , TestCase });
         associateProject({ Task }); 
         associateTestCase({ Task });
+
+        associateBugReport({ TestCase, Task, User });
        
     } catch (error) {
         console.error('Error syncing models:', error);
     }
 };
+
+const initializeDatabase = async () => {
+    await syncTestCaseTable();
+    await syncBugReportTable();
+  };
+  
+  initializeDatabase();
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, async () => {
