@@ -24,7 +24,9 @@ const Epic = db.define('Epic', {
     },
   },
   status: {
+   
     type: DataTypes.ENUM('not started', 'started', 'in progress', 'completed'),
+
     allowNull: true,
     defaultValue: 'not started',
   },

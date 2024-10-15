@@ -1,7 +1,7 @@
 import express from 'express';
 import {addProject,displayProject,getProjectName,taskCreation
 ,taskList,taskModalData,getroles,assignTo,assignedList
-,assignedListStatus} from '../controllers/projectController/projectController.js'
+,assignedListStatus,addModules,listingEpic} from '../controllers/projectController/projectController.js'
 
 const router = express.Router();
 
@@ -16,6 +16,10 @@ router.get('/task/assign/roles',getroles)
 router.put('/task/assignto',assignTo)
 router.get('/tasks/assignedlist',assignedList)
 router.patch('/tasks/assignedlist/:taskId',assignedListStatus)
+
+
+router.post('/addModules',addModules)
+router.get('/listEpic',listingEpic)
 
 
 

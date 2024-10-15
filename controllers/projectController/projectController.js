@@ -1,6 +1,7 @@
 import Project from '../../models/projectModel.js'
 import Task from '../../models/taskModel.js'
 import User from '../../models/suserModel.js'
+import Epic from '../../models/epicModel.js';
 import { Op } from 'sequelize';
 
 
@@ -46,6 +47,7 @@ export const displayProject  = async (req, res) => {
 
 export const getProjectName = async (req, res) => {
     try {
+        
 
         const projectId = req.params.id;
         const project = await Project.findOne({
@@ -66,7 +68,7 @@ export const getProjectName = async (req, res) => {
 
 export const taskCreation = async (req, res) => {
     try {
-        console.log('loggggg',req.body);
+      
         const { projectName, taskName, description, projectId } = req.body;
         const newTask = await Task.create({
             projectName,
@@ -203,6 +205,60 @@ export const  assignedListStatus = async (req, res) => {
     }
 }
 
+
+
+
+
+export const addModules = async (req, res) => {
+    try {
+        const { projectId, projectName, name, description, status } = req.body;
+        const newEpic = await Epic.create({
+            projectId,
+            projectName,
+            name,
+            description,
+            status,
+          });
+          console.log('ajsgdf',newEpic);
+      
+          res.status(201).json({ message: 'Module created successfully', newEpic });
+        
+    } catch (error) {
+        console.error('Error storing module:', error);
+    res.status(500).json({ error: 'Error storing module' });
+        
+    }
+}
+
+
+export const listingEpic  = async (req, res) => {
+    try {
+        const projectId = req.query.projectId;
+        if (!projectId) {
+            return res.status(400).json({ error: 'Project ID is required.' }); // Handle case where projectId is not provided
+        }
+
+        const epics = await Epic.findAll({
+            where: {
+                projectId: projectId, 
+            },
+        });
+        console.log('jhvf',epics);
+        console.log('dsgfg');
+
+        
+        if (epics.length === 0) {
+            return res.status(404).json({ message: 'No epics found for this project.' });
+        }
+
+        res.json(epics); 
+        
+    } catch (error) {
+        console.error('Error fetching epics:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+        
+    }
+}
 
 
 

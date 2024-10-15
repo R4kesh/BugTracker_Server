@@ -25,6 +25,14 @@ const Task = db.define('Task', {
             key: 'id',
         },
     },
+    epicId: {  
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+            model: Epic,
+            key: 'id',
+        },
+    },
     assigned: {
         type: DataTypes.INTEGER,
         allowNull: true,
@@ -73,6 +81,9 @@ export const associateTask = (models) => {
       
     Task.belongsTo(models.User, { foreignKey: 'assigned', as: 'assignedUser' });
     }
+    if (models.Epic) {  
+        Task.belongsTo(models.Epic, { foreignKey: 'epicId' });
+    }
 };
 
 export default Task;
@@ -81,12 +92,14 @@ export default Task;
 
 const syncTables = async () => {
   try {
-      // Sync Project and User first since Task depends on them
+    
       await Project.sync();
       await User.sync();
+      await Epic.sync();
+      await Task.sync({ force: true });
 
-      // Now sync Task, which has foreign key dependencies
-      await Task.sync({ alter: true });  // or use { force: true } if you want to recreate the table
+    
+        // or use { force: true } if you want to recreate the table
 
       console.log('All tables synced successfully');
   } catch (error) {

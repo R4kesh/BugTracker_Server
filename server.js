@@ -13,7 +13,7 @@ import Project, { associateProject } from './models/projectModel.js';
 import TestCase,{associateTestCase} from './models/testCasesModel.js';
 import { syncTestCaseTable } from './models/testCasesModel.js';
 import { associateBugReport, syncBugReportTable } from './models/bugReportModel.js';
-import {associateEpic} from './models/epicModel.js'
+import Epic,{associateEpic} from './models/epicModel.js'
 
 dotenv.config();
 
@@ -47,7 +47,7 @@ const syncModels = async () => {
 
        
        
-        associateTask({ Project, User , TestCase });
+        associateTask({ Project, User , TestCase,Epic });
         associateProject({ Task }); 
         associateTestCase({ Task });
 
