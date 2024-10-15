@@ -1,4 +1,7 @@
 import User from '../models/suserModel.js';
+import BugReport from '../models/bugReportModel.js';
+import Task from '../models/taskModel.js';
+import Project from '../models/projectModel.js';
 
 
 export const getDasboardCount = async (req, res) => {
@@ -104,3 +107,43 @@ export const blockUnblockUser= async (req, res) => {
   }
 }
 
+
+export const listReport = async (req, res) => {
+  try {
+    console.log('dfg');
+
+    const testReports = await BugReport.findAll({
+      include: [
+        {
+          model: Task,
+          as: 'task',
+          attributes: ['taskName'],
+          include: [
+            {
+              model: Project,
+              attributes: ['name'], // Include Project name
+            },
+            {
+              model: User,
+              as: 'assignedUser', // Developer assigned to the task
+              attributes: ['name'],
+            },
+          ],
+        },
+        {
+          model: User,
+          as: 'tester',
+          attributes: ['name'], // Tester for the bug report
+        },
+      ],
+    });
+
+    res.json(testReports);
+    
+    
+  } catch (error) {
+    console.error('Error fetching test reports:', error);
+    res.status(500).json({ message: 'Server Error' });
+    
+  }
+}

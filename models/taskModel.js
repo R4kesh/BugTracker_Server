@@ -57,7 +57,7 @@ const Task = db.define('Task', {
 },
 status: {
     type: DataTypes.ENUM('pending', 'started', 'in-Progress', 'completed'),
-    allowNull: false,
+    allowNull: true,
   },
    
 });

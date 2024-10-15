@@ -2,6 +2,7 @@ import Task from '../../models/taskModel.js'
 import Project from '../../models/projectModel.js'
 import User from '../../models/suserModel.js';
 import TestCase from '../../models/testCasesModel.js';
+import BugReport from '../../models/bugReportModel.js'
 import { Op } from 'sequelize'; 
 
 
@@ -116,8 +117,28 @@ export const  testCaseCreation  = async (req, res) => {
 
 export const updateBugReport  = async (req, res) => {
   try {
-    console.log('g');
-    console.log('req',req.body);
+    const { taskId, testerId, testCaseId, testCase } = req.body;
+
+    // Extract testCase fields
+    const { severity, testStatus, selectedSteps, result } = testCase;
+
+    // Insert into BugReport table
+    const newBugReport = await BugReport.create({
+      taskId: taskId,
+      testerId: testerId,
+      testCaseId: testCaseId,
+      severity: severity,
+      result: result,
+      steps: selectedSteps, // Assuming selectedSteps is an array, stored as JSON
+      testStatus: testStatus,
+      // fileLink is not included as per your instruction
+    });
+
+    // Respond with the created bug report
+    res.status(201).json({
+      message: 'Bug report created successfully',
+      bugReport: newBugReport,
+    });
     
   } catch (error) {
     console.error('Error creating bug report:', error);
