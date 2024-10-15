@@ -2,6 +2,7 @@ import { DataTypes } from 'sequelize';
 import db from '../config/db.js';
 import Project from './projectModel.js'
 import User from './suserModel.js'
+import Epic from './epicModel.js';
 
 const Task = db.define('Task', {
     projectName: {
@@ -76,14 +77,7 @@ export const associateTask = (models) => {
 
 export default Task;
 
-// const syncTaskTable = async () => {
-//     try {
-//         await Task.sync();
-//         console.log('Task table created or exists already');
-//     } catch (error) {
-//         console.error('Error creating task table:', error);
-//     }
-// };
+
 
 const syncTables = async () => {
   try {

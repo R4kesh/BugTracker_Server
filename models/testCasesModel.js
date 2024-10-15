@@ -48,7 +48,7 @@ export const associateTestCase = (models) => {
 
 export const syncTestCaseTable = async () => {
   try {
-    await TestCase.sync({ force: true });
+    await TestCase.sync({ alter: true, force: false })
     console.log('TestCase table created or exists already');
   } catch (error) {
     console.error('Error creating TestCase table:', error);
