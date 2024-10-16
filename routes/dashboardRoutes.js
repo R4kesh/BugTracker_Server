@@ -1,5 +1,5 @@
 import express from 'express';
-import {getDasboardCount} from '../controllers/dashboardController.js'
+import {getDasboardCount, projectPreview, projectTrack} from '../controllers/dashboardController.js'
 import {requestedUser} from '../controllers/dashboardController.js'
 import {approveUser} from '../controllers/dashboardController.js'
 import {listUsers} from '../controllers/dashboardController.js'
@@ -15,8 +15,8 @@ router.put('/usermanagement/block_unblock/:id',blockUnblockUser)
 
 
 router.get('/listBugReport',listReport)
-
-
+router.get('/projecttrack',projectTrack)
+router.get('/projectpreview',projectPreview)
 
 
 export default router; 
