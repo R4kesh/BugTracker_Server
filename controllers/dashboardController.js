@@ -2,6 +2,7 @@ import User from '../models/suserModel.js';
 import BugReport from '../models/bugReportModel.js';
 import Task from '../models/taskModel.js';
 import Project from '../models/projectModel.js';
+import Epic from '../models/epicModel.js';
 
 
 export const getDasboardCount = async (req, res) => {
@@ -168,5 +169,16 @@ export const projectPreview=async (req, res) => {
     res.json(projects);
   } catch (error) {
     res.status(500).json({ error: 'Error fetching projects' });
+  }
+};
+
+
+export const previewModule= async (req, res) => {
+  const { id } = req.params;  
+  try {
+    const modules = await Epic.findAll({ where: { projectId :id } });
+    res.json(modules);
+  } catch (error) {
+    res.status(500).json({ error: 'Error fetching modules' });
   }
 };
