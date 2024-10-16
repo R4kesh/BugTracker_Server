@@ -1,5 +1,5 @@
 import express from 'express';
-import {getDasboardCount, previewModule, projectPreview, projectTrack} from '../controllers/dashboardController.js'
+import {getDasboardCount, previewModule, previewTask, projectPreview, projectTrack} from '../controllers/dashboardController.js'
 import {requestedUser} from '../controllers/dashboardController.js'
 import {approveUser} from '../controllers/dashboardController.js'
 import {listUsers} from '../controllers/dashboardController.js'
@@ -18,6 +18,6 @@ router.get('/listBugReport',listReport)
 router.get('/projecttrack',projectTrack)
 router.get('/projectpreview',projectPreview)
 router.get('/previewmodule/:id',previewModule)
-
+router.get('/previewcard/:id',previewTask)
 
 export default router; 

@@ -182,3 +182,18 @@ export const previewModule= async (req, res) => {
     res.status(500).json({ error: 'Error fetching modules' });
   }
 };
+
+export const previewTask= async (req, res) => {
+  console.log('jiiiii');
+  
+  const {id}=req.params
+  
+  try {
+    const tasks = await Task.findAll({
+      where: { epicId: id },
+    });
+    res.status(200).json(tasks);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch tasks' });
+  }
+}
