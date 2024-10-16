@@ -41,6 +41,7 @@ const Task = db.define('Task', {
             key: 'id',
         },
     },
+    
     starting: {
         type: DataTypes.DATE,
         allowNull: true,
@@ -68,6 +69,10 @@ status: {
     type: DataTypes.ENUM('pending', 'started', 'in-Progress', 'completed'),
     allowNull: true,
   },
+  userStory: { 
+    type: DataTypes.STRING(1000),
+    allowNull: true, // Can be set to false if you want it to be required
+},
    
 });
 
@@ -96,10 +101,10 @@ const syncTables = async () => {
       await Project.sync();
       await User.sync();
       await Epic.sync();
-      await Task.sync({ force: true });
-
+  
+      await Task.sync({ alter: true });
     
-        // or use { force: true } if you want to recreate the table
+      
 
       console.log('All tables synced successfully');
   } catch (error) {

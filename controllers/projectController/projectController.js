@@ -66,15 +66,36 @@ export const getProjectName = async (req, res) => {
     }
 }
 
+export const getEpicName = async (req, res) => {
+    try {
+        const  epicId  = req.params.id;
+        const epic = await Epic.findOne({
+            where: { id: epicId },
+            attributes: ['name'], 
+          });
+        
+    if (!epic) return res.status(404).send('Epic not found');
+    res.json({ name: epic.name });
+        
+    } catch (error) {
+        console.error('Error fetching Epic name:', error);
+    res.status(500).json({ message: 'Server error, unable to fetch Epic name.' });
+        
+    }
+}
+
 export const taskCreation = async (req, res) => {
     try {
+        console.log('re',req.body);
       
-        const { projectName, taskName, description, projectId } = req.body;
+        const { projectName, taskName, description, projectId,epicId,userStory } = req.body;
         const newTask = await Task.create({
             projectName,
             taskName,
             description,
             projectId,
+            epicId,
+            userStory,
             assigned: null, 
             starting: null, 
             deadline: null, 
@@ -90,18 +111,23 @@ export const taskCreation = async (req, res) => {
 
 export const taskList = async (req, res) => {
     try {
-        const { projectId } = req.params;
+       
+        const { epicId } = req.params;
        
         const tasks = await Task.findAll({
-            where: { projectId },
+            where: { epicId },
             include: [
-                {
-                    model: User,
-                    as: 'assignedUser', 
-                    attributes: ['name'], 
-                },
+              {
+                model: User,
+                as: 'assignedUser',
+                attributes: ['name'], // Get user name
+              },
+              {
+                model: Epic,
+                attributes: ['name'], // Get the moduleName from Epic table
+              },
             ],
-        });
+          });
         
         
     res.status(200).json(tasks);
