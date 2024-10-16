@@ -184,15 +184,50 @@ export const previewModule= async (req, res) => {
 };
 
 export const previewTask= async (req, res) => {
-  console.log('jiiiii');
+
   
   const {id}=req.params
+  console.log('epic',id);
   
   try {
     const tasks = await Task.findAll({
-      where: { epicId: id },
+      where: { epicId:id },
+      include: [
+        {
+          model: Project,
+          attributes: ['name'], // Select project name
+        },
+        {
+          model: User,
+          as: 'assignedUser', // Alias used in Task model
+          attributes: ['name'], // Select user name
+        },
+        {
+          model: Epic,
+          attributes: ['name'], // Select epic name
+        },
+        
+      ],
     });
-    res.status(200).json(tasks);
+    console.log('tsss',tasks);
+
+    // Map the results to include the necessary fields
+    const formattedTasks = tasks.map(task => ({
+      id: task.id,
+      projectName: task.Project.name, // Access the project name
+      epicName: task.Epic ? task.Epic.name : 'No Epic Name', // Provide a default if no epic name exists
+      assignedUserName: task.assignedUser ? task.assignedUser.name : 'Unassigned', // Access user name
+      userStory: task.userStory || 'No user story provided', // Access user story
+      taskName: task.taskName,
+      description: task.description,
+      starting: task.starting,
+      deadline: task.deadline,
+      status: task.status,
+    }));
+
+    console.log('fills',formattedTasks);
+
+    res.json(formattedTasks);
   } catch (error) {
     res.status(500).json({ error: 'Failed to fetch tasks' });
   }
