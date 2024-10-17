@@ -102,7 +102,7 @@ const syncTables = async () => {
       await User.sync();
       await Epic.sync();
   
-      await Task.sync({ alter: true });
+      await Task.sync({ alter: true});
     
       
 
