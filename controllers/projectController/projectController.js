@@ -192,7 +192,7 @@ export const assignedList = async (req, res) => {
     try {
         const tasks = await Task.findAll({
             where: {
-                assigned: { [Op.ne]: null }  // Filter to exclude tasks with 'assigned' as NULL
+                assigned: { [Op.ne]: null } 
             },
             
             include: [
@@ -269,8 +269,7 @@ export const listingEpic  = async (req, res) => {
                 projectId: projectId, 
             },
         });
-        console.log('jhvf',epics);
-        console.log('dsgfg');
+     
 
         
         if (epics.length === 0) {
