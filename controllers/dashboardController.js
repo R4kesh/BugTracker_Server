@@ -232,3 +232,46 @@ export const previewTask= async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch tasks' });
   }
 }
+
+export const userProfile = async (req, res) => {
+  
+
+  // Destructure userId from req.params
+  const { Id } = req.params;
+  
+
+  try {
+    const user = await User.findOne({
+      where: { id: Id },
+    });
+  
+    
+    // Send the user data as JSON response
+    res.json(user);
+  } catch (error) {
+    // Handle the error and respond appropriately
+    console.error('Error fetching user:', error);
+    res.status(500).json({ error: 'An error occurred while fetching the user profile.' });
+  }
+};
+
+export const editUserProfile=async (req, res) => {
+  const { userId } = req.params;
+  const { name, phoneNumber } = req.body;
+
+  try {
+    const user = await User.update(
+      { name,  phoneNumber },
+      { where: { id: userId } }
+    );
+    
+    if (user[0] === 1) {
+      res.status(200).json({ message: 'Profile updated successfully' });
+    } else {
+      res.status(400).json({ message: 'Failed to update profile' });
+    }
+  } catch (error) {
+    console.error('Error updating profile:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
