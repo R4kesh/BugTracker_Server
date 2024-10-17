@@ -1,4 +1,6 @@
 import express from 'express';
+import multer from 'multer'
+import path from 'path'
 
 import {listAllTasks,dashboardCount,testCaseCreation,listTestCases,updateBugReport} from '../controllers/testerController/testerController.js'
 
