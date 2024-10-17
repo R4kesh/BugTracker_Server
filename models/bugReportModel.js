@@ -6,11 +6,11 @@ import User from './suserModel.js';
 
 const BugReport = db.define('BugReport', {
     severity: {
-      type: DataTypes.ENUM('High', 'Medium', 'Low'),
+      type: DataTypes.ENUM('High','Medium','Low'),
       allowNull: false,
     },
     result: {
-      type: DataTypes.ENUM('Pass', 'Fail'),
+      type: DataTypes.ENUM('Pass','Fail'),
       allowNull: false,
     },
     steps: {
@@ -46,10 +46,10 @@ const BugReport = db.define('BugReport', {
           key: 'id',
         },
       },
-    fileLink: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    }
+      fileLink: {
+        type: DataTypes.JSON, 
+        allowNull: true,
+      }
   });
 
   // export const associateBugReport = (models) => {

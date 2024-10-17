@@ -117,25 +117,48 @@ export const  testCaseCreation  = async (req, res) => {
 
 export const updateBugReport  = async (req, res) => {
   try {
-    const { taskId, testerId, testCaseId, testCase } = req.body;
+    console.log('dfb');
+    console.log('req',req.body);
+    console.log('file',req.files);
+    const {
+      taskId,
+      testerId,
+      testCaseId,
+    
+      severity,
+      testStatus,
+      result,
+      selectedSteps,
+    } = req.body;
+    const steps=selectedSteps
 
-    // Extract testCase fields
-    const { severity, testStatus, selectedSteps, result } = testCase;
+    if (!severity || !result || !steps || !testCaseId || !taskId || !testerId) {
+      return res.status(400).json({ error: 'Missing required fields' });
+    }
 
-    // Insert into BugReport table
+    const files = req.files;
+
+    // If there are files, store their file paths
+    let filePaths = [];
+    if (files) {
+      filePaths = files.map((file) => {
+        return `/uploads/${file.filename}`;
+      });
+    }
+
     const newBugReport = await BugReport.create({
-      taskId: taskId,
-      testerId: testerId,
-      testCaseId: testCaseId,
-      severity: severity,
-      result: result,
-      steps: selectedSteps, // Assuming selectedSteps is an array, stored as JSON
-      testStatus: testStatus,
-      // fileLink is not included as per your instruction
+      severity,
+      result,
+      steps,
+      testStatus,
+      testCaseId,
+      taskId,
+      testerId,
+      fileLink:filePaths
     });
+    console.log('resui',newBugReport);
 
-    // Respond with the created bug report
-    res.status(201).json({
+    return res.status(201).json({
       message: 'Bug report created successfully',
       bugReport: newBugReport,
     });
@@ -143,6 +166,33 @@ export const updateBugReport  = async (req, res) => {
   } catch (error) {
     console.error('Error creating bug report:', error);
     res.status(500).json({ message: 'Internal server error', error: error.message });
+    
+  }
+}
+
+export const listSubmitterReport =async (req, res) => {
+  try {
+    const { testerId } = req.params;
+
+    const reports = await BugReport.findAll({
+      where: { testerId },
+      include: [
+        { model: TestCase, as: 'testCase' },
+        { model: Task, as: 'task' },
+      ],
+    });
+
+    console.log('report',reports);
+
+    if (!reports.length) {
+      return res.status(404).json({ message: 'No reports found for this tester.' });
+    }
+
+    return res.status(200).json(reports);
+    
+  } catch (error) {
+    console.error('Error fetching reports:', error);
+    return res.status(500).json({ error: 'Internal Server Error' });
     
   }
 }
