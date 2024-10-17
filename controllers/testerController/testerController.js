@@ -130,7 +130,9 @@ export const updateBugReport  = async (req, res) => {
       result,
       selectedSteps,
     } = req.body;
-    const steps=selectedSteps
+    let  steps=[]
+    steps=selectedSteps
+    console.log('seele',steps);
 
     if (!severity || !result || !steps || !testCaseId || !taskId || !testerId) {
       return res.status(400).json({ error: 'Missing required fields' });
@@ -156,7 +158,7 @@ export const updateBugReport  = async (req, res) => {
       testerId,
       fileLink:filePaths
     });
-    console.log('resui',newBugReport);
+    // console.log('resui',newBugReport);
 
     return res.status(201).json({
       message: 'Bug report created successfully',
@@ -177,12 +179,12 @@ export const listSubmitterReport =async (req, res) => {
     const reports = await BugReport.findAll({
       where: { testerId },
       include: [
-        { model: TestCase, as: 'testCase' },
+        { model: TestCase, as: 'testCase' ,attributes: ['name', 'description'],},
         { model: Task, as: 'task' },
       ],
     });
 
-    console.log('report',reports);
+    // console.log('reportzz',reports);
 
     if (!reports.length) {
       return res.status(404).json({ message: 'No reports found for this tester.' });

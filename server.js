@@ -31,6 +31,8 @@ app.use('/api/project', projectRoutes);
 app.use('/api/userDashboard',userDashboardRoutes)
 app.use('/api/tester',testerDashboard)
 
+app.use('/uploads', express.static('assets'));// path redirection
+
 
 
 
