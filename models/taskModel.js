@@ -114,4 +114,3 @@ const syncTables = async () => {
 
 syncTables();
 
-
