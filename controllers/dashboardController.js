@@ -321,3 +321,20 @@ export const reAssign=async (req, res) => {
     
   }
 }
+
+export const getProjectCounts = async (req, res) => {
+  try {
+    // Get total project count
+    const totalProjects = await Project.count();
+
+    // Get count of completed projects
+    const completedProjects = await Project.count({
+      where: { status: 'completed' }
+    });
+
+    res.status(200).json({ totalProjects, completedProjects });
+  } catch (error) {
+    console.error('Error fetching project counts:', error);
+    res.status(500).json({ error: 'Failed to fetch project counts' });
+  }
+};
