@@ -14,6 +14,8 @@ import TestCase,{associateTestCase} from './models/testCasesModel.js';
 import { syncTestCaseTable } from './models/testCasesModel.js';
 import { associateBugReport, syncBugReportTable } from './models/bugReportModel.js';
 import Epic,{associateEpic} from './models/epicModel.js'
+import ReAssign, { associateReAssign, syncReAssignTable } from './models/reAssignModel.js';
+import BugReport from './models/bugReportModel.js'
 
 dotenv.config();
 
@@ -47,14 +49,12 @@ const syncModels = async () => {
         await sequelize.sync();
         console.log('Database models synced successfully');
 
-       
-       
         associateTask({ Project, User , TestCase,Epic });
         associateProject({ Task }); 
         associateTestCase({ Task });
-
         associateBugReport({ TestCase, Task, User });
         associateEpic({ Project }); 
+        associateReAssign({ Task, User, BugReport });
        
     } catch (error) {
         console.error('Error syncing models:', error);
@@ -64,6 +64,7 @@ const syncModels = async () => {
 const initializeDatabase = async () => {
     await syncTestCaseTable();
     await syncBugReportTable();
+    await syncReAssignTable();
   };
   
   initializeDatabase();

@@ -3,6 +3,7 @@ import BugReport from '../models/bugReportModel.js';
 import Task from '../models/taskModel.js';
 import Project from '../models/projectModel.js';
 import Epic from '../models/epicModel.js';
+import ReAssign from '../models/reAssignModel.js';
 
 
 export const getDasboardCount = async (req, res) => {
@@ -118,23 +119,23 @@ export const listReport = async (req, res) => {
         {
           model: Task,
           as: 'task',
-          attributes: ['taskName'],
+          attributes: ['taskName','id','description','starting'],
           include: [
             {
               model: Project,
-              attributes: ['name'], // Include Project name
+              attributes: ['name','id'], // Include Project name
             },
             {
               model: User,
               as: 'assignedUser', // Developer assigned to the task
-              attributes: ['name'],
+              attributes: ['name','id'],
             },
           ],
         },
         {
           model: User,
           as: 'tester',
-          attributes: ['name'], // Tester for the bug report
+          attributes: ['name','id'], // Tester for the bug report
         },
       ],
     });
@@ -275,3 +276,48 @@ export const editUserProfile=async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 };
+
+
+export const reAssign=async (req, res) => {
+  console.log('req.body-11',req.body);
+  try {
+    const {
+      reassignId,
+      deadline,
+      taskId,
+      projectId,
+      testerId,
+      taskStartedDate,
+      reassignDate,
+      severity,
+      bugReportId,
+      previousDeveloperId,
+      reassignedToId,
+    } = req.body;
+
+    // Ensure required fields are present
+    if (!reassignId || !taskId || !projectId || !testerId || !severity || !bugReportId || !previousDeveloperId || !reassignedToId) {
+      return res.status(400).json({ error: 'Missing required fields' });
+    }
+
+    // Create the ReAssign record in the database
+    const newReassign = await ReAssign.create({
+      reassignId,
+      deadline,
+      taskId,
+      projectId,
+      testerId,
+      taskStartedDate,
+      reassignDate,
+      severity,
+      bugReportId,
+      previousDeveloperId,
+      reassignedToId,
+    });
+
+    return res.status(201).json({ message: 'Reassignment data saved successfully', data: newReassign });
+    
+  } catch (error) {
+    
+  }
+}
