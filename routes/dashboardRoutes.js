@@ -1,5 +1,5 @@
 import express from 'express';
-import {editUserProfile, getDasboardCount, previewModule, previewTask, projectPreview, projectTrack, userProfile,reAssign} from '../controllers/dashboardController.js'
+import {editUserProfile, getDasboardCount, previewModule, previewTask, projectPreview, projectTrack, userProfile,reAssign, getProjectCounts} from '../controllers/dashboardController.js'
 import {requestedUser} from '../controllers/dashboardController.js'
 import {approveUser} from '../controllers/dashboardController.js'
 import {listUsers} from '../controllers/dashboardController.js'
@@ -12,7 +12,7 @@ router.get('/requested_user',requestedUser)
 router.put('/approve_user/:id',approveUser)
 router.get('/usermanagement',listUsers)
 router.put('/usermanagement/block_unblock/:id',blockUnblockUser)
-
+router.get('/project_counts', getProjectCounts);
 
 router.get('/listBugReport',listReport)
 router.get('/projecttrack',projectTrack)
