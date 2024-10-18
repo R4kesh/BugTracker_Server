@@ -52,11 +52,6 @@ const BugReport = db.define('BugReport', {
       }
   });
 
-  // export const associateBugReport = (models) => {
-  //   BugReport.belongsTo(models.TestCase, { foreignKey: 'testCaseId' });
-  //   BugReport.belongsTo(models.Task, { foreignKey: 'taskId' });
-  //   BugReport.belongsTo(models.User, { foreignKey: 'testerId', as: 'tester' }); // Reference to tester
-  // };
 
   export const associateBugReport = ({ TestCase, Task, User }) => {
     BugReport.belongsTo(TestCase, { foreignKey: 'testCaseId', as: 'testCase' });
