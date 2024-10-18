@@ -35,7 +35,7 @@ steps: {
     defaultValue: 'pending', 
   },
   fileLink: {
-    type: DataTypes.STRING,
+    type: DataTypes.JSON,
     allowNull: true,
   }
 });
