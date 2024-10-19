@@ -150,18 +150,6 @@ export const listReport = async (req, res) => {
   }
 }
 
-export const projectTrack=async (req, res) => {
- 
-  try {
-    const projects = await Project.findAll();
- 
-    
-    res.json(projects);
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch projects' });
-  }
-};
-
 export const projectPreview=async (req, res) => {
   
   try {

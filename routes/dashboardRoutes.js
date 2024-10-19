@@ -15,7 +15,7 @@ router.put('/usermanagement/block_unblock/:id',blockUnblockUser)
 router.get('/project_counts', getProjectCounts);
 
 router.get('/listBugReport',listReport)
-router.get('/projecttrack',projectTrack)
+router.get('/projecttrack/:id',projectTrack)
 router.get('/projectpreview',projectPreview)
 router.get('/previewmodule/:id',previewModule)
 router.get('/previewcard/:id',previewTask)
