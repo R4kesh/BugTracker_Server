@@ -1,7 +1,7 @@
 import express from 'express';
 
 import {displayCount,getNewTasks,userAcceptTask
-,listTasks,changeStatus} from '../controllers/userController/userController.js'
+,listTasks,changeStatus,reAssignedList} from '../controllers/userController/userController.js'
 
 
 
@@ -12,5 +12,6 @@ router.get('/newtasks/user',getNewTasks)
 router.put('/tasks/verifyByUser',userAcceptTask)
 router.get('/listApprovedTasks/:userId',listTasks)
 router.put('/changeTasksStatus/:taskId',changeStatus)
+router.get('/reassignedList',reAssignedList)
 
 export default router; 

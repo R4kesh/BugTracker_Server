@@ -75,11 +75,16 @@ const ReAssign = db.define('ReAssign', {
       key: 'id',
     },
   },
+  isCompleted: {
+    type: DataTypes.BOOLEAN, // Boolean field for task completion
+    defaultValue: false, // Set default value to false
+    allowNull: false,
+  },
 });
 
 export const associateReAssign = ({ Task, User, BugReport, Project }) => {
   ReAssign.belongsTo(Task, { foreignKey: 'taskId', as: 'task' });
-  ReAssign.belongsTo(Project, { foreignKey: 'projectId', as: 'project' });
+  ReAssign.belongsTo(Project, { foreignKey: 'projectId', as: 'project'  });
   ReAssign.belongsTo(User, { foreignKey: 'testerId', as: 'tester' });
   ReAssign.belongsTo(BugReport, { foreignKey: 'bugReportId', as: 'bugReport' });
   ReAssign.belongsTo(User, { foreignKey: 'previousDeveloperId', as: 'previousDeveloper' });

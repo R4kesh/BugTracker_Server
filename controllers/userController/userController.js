@@ -1,4 +1,9 @@
 import Task from '../../models/taskModel.js'
+import ReAssign from '../../models/reAssignModel.js';
+import User from '../../models/suserModel.js';
+import BugReport from '../../models/bugReportModel.js';
+import Project from '../../models/projectModel.js';
+
 
 
 export const displayCount = async (req, res) => {
@@ -118,6 +123,55 @@ export const  changeStatus = async (req, res) => {
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Error updating task' });
+        
+    }
+}
+
+export const reAssignedList= async (req, res) => {
+    try {
+        console.log('jhagvf',req.query);
+        const { userid } = req.query;
+        
+        const reassignedTasks = await ReAssign.findAll({
+            where: {
+              reassignedToId: userid, // Filter by reassignedToId
+            },
+            include: [
+              {
+                model: Task, // Assuming you have a Task model
+                as: 'task', // Adjust alias based on your model definition
+            },
+            {
+              model: Project,
+              as: 'project', // Make sure to use the correct alias if defined
+            },
+              {
+                model: User, // Assuming you have a User model for the tester
+                as: 'tester', // Adjust alias based on your model definition
+              },
+              {
+                model: User, // Assuming you have a User model for the previous developer
+                as: 'previousDeveloper', // Adjust alias based on your model definition
+              },
+              {
+                model: User, // Assuming you have a User model for the user it is reassigned to
+                as: 'reassignedTo', // Adjust alias based on your model definition
+              },
+              {
+                model: BugReport, // Assuming you have a BugReport model
+                as: 'bugReport', // Adjust alias based on your model definition
+              },
+            ],
+          });
+
+          console.log('datas',reassignedTasks);
+      
+          // Send the retrieved tasks as a response
+          return res.status(200).json(reassignedTasks);
+        
+    } catch (error) {
+        console.error('Error fetching reassigned tasks:', error);
+    return res.status(500).json({ message: 'Failed to fetch reassigned tasks' });
         
     }
 }

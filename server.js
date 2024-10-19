@@ -54,7 +54,7 @@ const syncModels = async () => {
         associateTestCase({ Task });
         associateBugReport({ TestCase, Task, User });
         associateEpic({ Project }); 
-        associateReAssign({ Task, User, BugReport });
+        associateReAssign({ Task, User, BugReport,Project });
        
     } catch (error) {
         console.error('Error syncing models:', error);
