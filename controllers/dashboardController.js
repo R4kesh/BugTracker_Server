@@ -338,3 +338,26 @@ export const getProjectCounts = async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch project counts' });
   }
 };
+
+export const getReAssignedTasks = async (req, res) => {
+  console.log('hi in');
+  
+  try {
+    const reAssignedTasks = await ReAssign.findAll({
+      include: [
+        { model: Task, as: 'task', attributes: ['TaskName'] },
+        { model: Project, as: 'project', attributes: ['name'] },
+        { model: User, as: 'tester', attributes: ['name'] },
+        { model: User, as: 'previousDeveloper', attributes: ['name'] },
+        { model: User, as: 'reassignedTo', attributes: ['name'] },
+        { model: BugReport, as: 'bugReport', attributes: ['severity,steps,fileLink'] },
+      ],
+    });
+console.log('reassigndata',reAssignedTasks);
+
+    res.status(200).json(reAssignedTasks);
+  } catch (error) {
+    console.error('Error fetching re-assigned tasks:', error);
+    res.status(500).json({ error: 'Failed to fetch re-assigned tasks' });
+  }
+};
