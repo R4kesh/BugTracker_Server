@@ -340,7 +340,7 @@ export const getProjectCounts = async (req, res) => {
 };
 
 export const getReAssignedTasks = async (req, res) => {
-  console.log('hi in');
+
   
   try {
     const reAssignedTasks = await ReAssign.findAll({
@@ -350,7 +350,7 @@ export const getReAssignedTasks = async (req, res) => {
         { model: User, as: 'tester', attributes: ['name'] },
         { model: User, as: 'previousDeveloper', attributes: ['name'] },
         { model: User, as: 'reassignedTo', attributes: ['name'] },
-        { model: BugReport, as: 'bugReport', attributes: ['severity,steps,fileLink'] },
+        { model: BugReport, as: 'bugReport', attributes: ['severity','steps','fileLink'] },
       ],
     });
 console.log('reassigndata',reAssignedTasks);
