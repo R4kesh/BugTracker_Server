@@ -349,3 +349,21 @@ console.log('reassigndata',reAssignedTasks);
     res.status(500).json({ error: 'Failed to fetch re-assigned tasks' });
   }
 };
+
+export const projectTrack=async (req, res) => {
+  const {id}=req.params
+ console.log('userdetails');
+ 
+   try {
+     const tasks = await Task.findAll({
+       where: { assigned: id }, // Fetch tasks where 'assigned' matches the userId
+       include: [Project], // Assuming Task belongs to Project, you can include the Project details as well
+     });
+ console.log('task',tasks);
+ 
+     res.status(200).json(tasks);
+   } catch (error) {
+     console.error('Error fetching tasks:', error);
+     res.status(500).json({ message: 'Failed to fetch tasks for the user' });
+   }
+ };
