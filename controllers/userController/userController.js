@@ -20,6 +20,7 @@ export const displayCount = async (req, res) => {
                 isCompleted: false
             }
         });
+        
 
         // Fetch other counts if needed (example: completed tasks, bugs, etc.)
         const completedTasksCount = await Task.count({
@@ -29,8 +30,16 @@ export const displayCount = async (req, res) => {
             }
         });
 
+        const reassignedTasksCount = await ReAssign.count({
+            where: {
+                reassignedToId: userId,
+                isCompleted: false
+            }
+        });
+
         res.status(200).json({ assignments: newTaskCount,
-            tasksCompleted: completedTasksCount });
+            tasksCompleted: completedTasksCount ,  reassignedTasks: reassignedTasksCount
+        });
         
         
     } catch (error) {
