@@ -2,25 +2,25 @@ import express from 'express';
 import {addProject,displayProject,getProjectName,taskCreation
 ,taskList,taskModalData,getroles,assignTo,assignedList
 ,assignedListStatus,addModules,listingEpic,getEpicName} from '../controllers/projectController/projectController.js'
-
+import { validateToken } from '../middlewares/validateToken.js';
 const router = express.Router();
 
-router.post('/add',addProject)
-router.get('/display',displayProject)
-router.get('/getProjectName/:id',getProjectName)
-router.get('/getEpicName/:id',getEpicName)
-router.post('/task/create',taskCreation)
-router.get('/task/getAll/:epicId',taskList)
-router.get('/task/getModalData',taskModalData)
-router.get('/task/assign/roles',getroles)
+router.post('/add',validateToken,addProject)
+router.get('/display',validateToken,displayProject)
+router.get('/getProjectName/:id',validateToken,getProjectName)
+router.get('/getEpicName/:id',validateToken,getEpicName)
+router.post('/task/create',validateToken,taskCreation)
+router.get('/task/getAll/:epicId',validateToken,taskList)
+router.get('/task/getModalData',validateToken,taskModalData)
+router.get('/task/assign/roles',validateToken,getroles)
 // router.get('/task/assign/names',getnames)
-router.put('/task/assignto',assignTo)
-router.get('/tasks/assignedlist',assignedList)
-router.patch('/tasks/assignedlist/:taskId',assignedListStatus)
+router.put('/task/assignto',validateToken,assignTo)
+router.get('/tasks/assignedlist',validateToken,assignedList)
+router.patch('/tasks/assignedlist/:taskId',validateToken,assignedListStatus)
 
 
-router.post('/addModules',addModules)
-router.get('/listEpic',listingEpic)
+router.post('/addModules',validateToken,addModules)
+router.get('/listEpic',validateToken,listingEpic)
 
 
 
