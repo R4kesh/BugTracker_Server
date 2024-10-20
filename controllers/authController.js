@@ -66,6 +66,7 @@ export const loginUser = async (req, res) => {
                     sameSite: "none",
                     maxAge:60 * 60 * 1000,
                   })
+                  console.log('cookie setted',);
 
             return res.status(200).json({
                 token,

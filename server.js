@@ -1,6 +1,9 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import cookieParser from 'cookie-parser';
+import session from "express-session";
+
 import authRoutes from './routes/authRoutes.js'; 
 import dashboardRoutes from './routes/dashboardRoutes.js'
 import projectRoutes from './routes/projectRoutes.js'
@@ -20,10 +23,22 @@ import BugReport from './models/bugReportModel.js'
 dotenv.config();
 
 const app = express();
+app.use(cookieParser())
 
 app.use(cors({
-    origin: 'http://localhost:5173'
+    origin: 'http://localhost:5173',
+    credentials: true,
+    exposedHeaders: ["set-cookie"],
 }));
+
+app.use(
+    session({
+      secret: "your_session_secret",
+      resave: false,
+      saveUninitialized: false,
+    })
+  );
+  
 
 app.use(express.json());
 

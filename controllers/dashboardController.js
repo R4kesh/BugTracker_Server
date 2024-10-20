@@ -89,6 +89,7 @@ export const listUsers = async (req, res) => {
 
 export const blockUnblockUser= async (req, res) => {
   try {
+    console.log('userdata',req.user);
     const { id } = req.params;
     const { isBlocked } = req.body;
 
