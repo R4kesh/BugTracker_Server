@@ -80,6 +80,11 @@ const ReAssign = db.define('ReAssign', {
     defaultValue: false, // Set default value to false
     allowNull: false,
   },
+  status: {
+    type: DataTypes.ENUM('not-started', 'in-progress', 'completed', 'on-hold'),
+    allowNull: false,
+    defaultValue: 'not-started',  
+  },
 });
 
 export const associateReAssign = ({ Task, User, BugReport, Project }) => {

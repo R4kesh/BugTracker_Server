@@ -284,9 +284,9 @@ export const reAssign=async (req, res) => {
     } = req.body;
 
     // Ensure required fields are present
-    if (!reassignId || !taskId || !projectId || !testerId || !severity || !bugReportId || !previousDeveloperId || !reassignedToId) {
-      return res.status(400).json({ error: 'Missing required fields' });
-    }
+    // if (!reassignId || !taskId || !projectId || !testerId || !severity || !bugReportId || !previousDeveloperId || !reassignedToId) {
+    //   return res.status(400).json({ error: 'Missing required fields' });
+    // }
 
     // Create the ReAssign record in the database
     const newReassign = await ReAssign.create({
@@ -302,10 +302,12 @@ export const reAssign=async (req, res) => {
       previousDeveloperId,
       reassignedToId,
     });
+    console.log('reassiqqqqq',newReassign);
 
     return res.status(201).json({ message: 'Reassignment data saved successfully', data: newReassign });
     
   } catch (error) {
+    console.log('err',error);
     
   }
 }
@@ -341,7 +343,7 @@ export const getReAssignedTasks = async (req, res) => {
         { model: BugReport, as: 'bugReport', attributes: ['severity','steps','fileLink'] },
       ],
     });
-console.log('reassigndata',reAssignedTasks);
+
 
     res.status(200).json(reAssignedTasks);
   } catch (error) {
@@ -352,14 +354,14 @@ console.log('reassigndata',reAssignedTasks);
 
 export const projectTrack=async (req, res) => {
   const {id}=req.params
- console.log('userdetails');
+ 
  
    try {
      const tasks = await Task.findAll({
        where: { assigned: id }, // Fetch tasks where 'assigned' matches the userId
        include: [Project], // Assuming Task belongs to Project, you can include the Project details as well
      });
- console.log('task',tasks);
+
  
      res.status(200).json(tasks);
    } catch (error) {
@@ -367,3 +369,50 @@ export const projectTrack=async (req, res) => {
      res.status(500).json({ message: 'Failed to fetch tasks for the user' });
    }
  };
+
+
+ export const trackHistoryTaskLIst=async (req, res) => {
+  try {
+    const id = req.params.id;
+
+
+const tasks = await Task.findAll({
+  where: { assigned: id },  // Filtering by assigned user ID
+  include: [
+    { model: Project, attributes: ['name'] },  // Include Project model to get project name
+  ],
+  attributes: ['taskName', 'description', 'starting', 'deadline', 'status']  // Fetch only the required fields
+});
+
+res.json(tasks);
+    
+    
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error });
+    
+  }
+ }
+
+ export const trackHistoryReassign=async (req, res) => {
+  try {
+    const {id}=req.params
+    console.log('par',id);
+    const reAssignedTasks = await ReAssign.findAll({
+      where: { reassignedToId: id }, 
+      include: [
+        { model: Task, as: 'task' }, 
+        { model: Project, as: 'project' }, 
+        { model: BugReport, as: 'bugReport' },
+        { model: User, as: 'reassignedTo' }, 
+        { model: User, as: 'previousDeveloper' }
+      ]
+    });
+    console.log('res',reAssignedTasks);
+    res.json(reAssignedTasks);
+  
+
+    
+  } catch (error) {
+    res.status(500).json({ error: 'Error fetching tasks' });
+  }
+ }

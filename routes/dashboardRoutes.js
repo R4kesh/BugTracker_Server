@@ -1,5 +1,6 @@
 import express from 'express';
-import {editUserProfile, getDasboardCount, previewModule, previewTask, projectPreview, projectTrack, userProfile,reAssign, getProjectCounts, getReAssignedTasks} from '../controllers/dashboardController.js'
+import {editUserProfile, getDasboardCount, previewModule, previewTask, projectPreview, projectTrack, userProfile,reAssign, getProjectCounts, getReAssignedTasks,trackHistoryTaskLIst,
+    trackHistoryReassign} from '../controllers/dashboardController.js'
 import {requestedUser} from '../controllers/dashboardController.js'
 import {approveUser} from '../controllers/dashboardController.js'
 import {listUsers} from '../controllers/dashboardController.js'
@@ -24,5 +25,8 @@ router.put('/updateprofile/:userId',editUserProfile)
 
 router.post('/reassign',reAssign)
 router.get('/reassignlist',getReAssignedTasks )
+
+router.get('/trackhistory/listTasks/:id',trackHistoryTaskLIst)
+router.get('/trackhistory/listReassignTask/:id',trackHistoryReassign)
 
 export default router; 

@@ -129,7 +129,7 @@ export const  changeStatus = async (req, res) => {
 
 export const reAssignedList= async (req, res) => {
     try {
-        console.log('jhagvf',req.query);
+     
         const { userid } = req.query;
         
         const reassignedTasks = await ReAssign.findAll({
@@ -164,7 +164,7 @@ export const reAssignedList= async (req, res) => {
             ],
           });
 
-          console.log('datas',reassignedTasks);
+          
       
           // Send the retrieved tasks as a response
           return res.status(200).json(reassignedTasks);
@@ -172,6 +172,38 @@ export const reAssignedList= async (req, res) => {
     } catch (error) {
         console.error('Error fetching reassigned tasks:', error);
     return res.status(500).json({ message: 'Failed to fetch reassigned tasks' });
+        
+    }
+}
+
+export const updateStatus=async (req, res) => {
+    try {
+      
+        const { taskId, status } = req.body; // Extract taskId and status from the request body
+
+    // Find the ReAssign task using taskId
+    const reassignTask = await ReAssign.findOne({ where: { taskId } });
+
+    // If task not found, return 404
+    if (!reassignTask) {
+      return res.status(404).json({ message: 'Reassigned task not found' });
+    }
+
+    // Update the status of the found task
+    reassignTask.status = status;
+
+    // Save the changes back to the database
+    await reassignTask.save();
+
+    // Respond with the updated task
+    res.status(200).json({
+      message: 'Task status updated successfully',
+      task: reassignTask,
+    });
+        
+    } catch (error) {
+        console.error('Error updating task status:', error);
+        res.status(500).json({ message: 'Failed to update task status' });
         
     }
 }
