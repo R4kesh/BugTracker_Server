@@ -417,3 +417,24 @@ res.json(tasks);
     res.status(500).json({ error: 'Error fetching tasks' });
   }
  }
+
+ export const getBugReportCount = async (req, res) => {
+  try {
+    const count = await BugReport.count();
+    res.json({ count });
+  } catch (error) {
+    console.error('Error fetching bug report count:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+
+export const reAssignCount=async (req, res) => {
+  try {
+    const count = await ReAssign.count();
+    res.json({ count });
+  } catch (error) {
+    console.error('Error fetching reassigned task count:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+}
