@@ -71,7 +71,7 @@ status: {
   },
   userStory: { 
     type: DataTypes.STRING(1000),
-    allowNull: true, // Can be set to false if you want it to be required
+    allowNull: true,
 },
    
 });
@@ -97,15 +97,14 @@ export default Task;
 
 const syncTables = async () => {
   try {
+    await Task.sync({alter:true});
     
       await Project.sync();
       await User.sync();
       await Epic.sync();
-  
-      await Task.sync({ alter: true});
-    
-      
 
+
+  
       console.log('All tables synced successfully');
   } catch (error) {
       console.error('Error syncing tables:', error);

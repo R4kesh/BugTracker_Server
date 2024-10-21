@@ -3,6 +3,7 @@ import BugReport from '../models/bugReportModel.js';
 import Task from '../models/taskModel.js';
 import Project from '../models/projectModel.js';
 import Epic from '../models/epicModel.js';
+import ReAssign from '../models/reAssignModel.js';
 
 
 export const getDasboardCount = async (req, res) => {
@@ -88,6 +89,7 @@ export const listUsers = async (req, res) => {
 
 export const blockUnblockUser= async (req, res) => {
   try {
+    console.log('userdata',req.user);
     const { id } = req.params;
     const { isBlocked } = req.body;
 
@@ -118,23 +120,23 @@ export const listReport = async (req, res) => {
         {
           model: Task,
           as: 'task',
-          attributes: ['taskName'],
+          attributes: ['taskName','id','description','starting'],
           include: [
             {
               model: Project,
-              attributes: ['name'], // Include Project name
+              attributes: ['name','id'], // Include Project name
             },
             {
               model: User,
               as: 'assignedUser', // Developer assigned to the task
-              attributes: ['name'],
+              attributes: ['name','id'],
             },
           ],
         },
         {
           model: User,
           as: 'tester',
-          attributes: ['name'], // Tester for the bug report
+          attributes: ['name','id'], // Tester for the bug report
         },
       ],
     });
@@ -148,18 +150,6 @@ export const listReport = async (req, res) => {
     
   }
 }
-
-export const projectTrack=async (req, res) => {
- 
-  try {
-    const projects = await Project.findAll();
- 
-    
-    res.json(projects);
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch projects' });
-  }
-};
 
 export const projectPreview=async (req, res) => {
   
@@ -275,3 +265,176 @@ export const editUserProfile=async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 };
+
+
+export const reAssign=async (req, res) => {
+  console.log('req.body-11',req.body);
+  try {
+    const {
+      reassignId,
+      deadline,
+      taskId,
+      projectId,
+      testerId,
+      taskStartedDate,
+      reassignDate,
+      severity,
+      bugReportId,
+      previousDeveloperId,
+      reassignedToId,
+    } = req.body;
+
+    // Ensure required fields are present
+    // if (!reassignId || !taskId || !projectId || !testerId || !severity || !bugReportId || !previousDeveloperId || !reassignedToId) {
+    //   return res.status(400).json({ error: 'Missing required fields' });
+    // }
+
+    // Create the ReAssign record in the database
+    const newReassign = await ReAssign.create({
+      reassignId,
+      deadline,
+      taskId,
+      projectId,
+      testerId,
+      taskStartedDate,
+      reassignDate,
+      severity,
+      bugReportId,
+      previousDeveloperId,
+      reassignedToId,
+    });
+    console.log('reassiqqqqq',newReassign);
+
+    return res.status(201).json({ message: 'Reassignment data saved successfully', data: newReassign });
+    
+  } catch (error) {
+    console.log('err',error);
+    
+  }
+}
+
+export const getProjectCounts = async (req, res) => {
+  try {
+    // Get total project count
+    const totalProjects = await Project.count();
+
+    // Get count of completed projects
+    const completedProjects = await Project.count({
+      where: { status: 'completed' }
+    });
+
+    res.status(200).json({ totalProjects, completedProjects });
+  } catch (error) {
+    console.error('Error fetching project counts:', error);
+    res.status(500).json({ error: 'Failed to fetch project counts' });
+  }
+};
+
+export const getReAssignedTasks = async (req, res) => {
+
+  
+  try {
+    const reAssignedTasks = await ReAssign.findAll({
+      include: [
+        { model: Task, as: 'task', attributes: ['TaskName'] },
+        { model: Project, as: 'project', attributes: ['name'] },
+        { model: User, as: 'tester', attributes: ['name'] },
+        { model: User, as: 'previousDeveloper', attributes: ['name'] },
+        { model: User, as: 'reassignedTo', attributes: ['name'] },
+        { model: BugReport, as: 'bugReport', attributes: ['severity','steps','fileLink'] },
+      ],
+    });
+
+
+    res.status(200).json(reAssignedTasks);
+  } catch (error) {
+    console.error('Error fetching re-assigned tasks:', error);
+    res.status(500).json({ error: 'Failed to fetch re-assigned tasks' });
+  }
+};
+
+export const projectTrack=async (req, res) => {
+  const {id}=req.params
+ 
+ 
+   try {
+     const tasks = await Task.findAll({
+       where: { assigned: id }, // Fetch tasks where 'assigned' matches the userId
+       include: [Project], // Assuming Task belongs to Project, you can include the Project details as well
+     });
+
+ 
+     res.status(200).json(tasks);
+   } catch (error) {
+     console.error('Error fetching tasks:', error);
+     res.status(500).json({ message: 'Failed to fetch tasks for the user' });
+   }
+ };
+
+
+ export const trackHistoryTaskLIst=async (req, res) => {
+  try {
+    const id = req.params.id;
+
+
+const tasks = await Task.findAll({
+  where: { assigned: id },  // Filtering by assigned user ID
+  include: [
+    { model: Project, attributes: ['name'] },  // Include Project model to get project name
+  ],
+  attributes: ['taskName', 'description', 'starting', 'deadline', 'status']  // Fetch only the required fields
+});
+
+res.json(tasks);
+    
+    
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error });
+    
+  }
+ }
+
+ export const trackHistoryReassign=async (req, res) => {
+  try {
+    const {id}=req.params
+    console.log('par',id);
+    const reAssignedTasks = await ReAssign.findAll({
+      where: { reassignedToId: id }, 
+      include: [
+        { model: Task, as: 'task' }, 
+        { model: Project, as: 'project' }, 
+        { model: BugReport, as: 'bugReport' },
+        { model: User, as: 'reassignedTo' }, 
+        { model: User, as: 'previousDeveloper' }
+      ]
+    });
+    console.log('res',reAssignedTasks);
+    res.json(reAssignedTasks);
+  
+
+    
+  } catch (error) {
+    res.status(500).json({ error: 'Error fetching tasks' });
+  }
+ }
+
+ export const getBugReportCount = async (req, res) => {
+  try {
+    const count = await BugReport.count();
+    res.json({ count });
+  } catch (error) {
+    console.error('Error fetching bug report count:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+
+export const reAssignCount=async (req, res) => {
+  try {
+    const count = await ReAssign.count();
+    res.json({ count });
+  } catch (error) {
+    console.error('Error fetching reassigned task count:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+}

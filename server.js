@@ -1,6 +1,9 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import cookieParser from 'cookie-parser';
+import session from "express-session";
+
 import authRoutes from './routes/authRoutes.js'; 
 import dashboardRoutes from './routes/dashboardRoutes.js'
 import projectRoutes from './routes/projectRoutes.js'
@@ -14,14 +17,28 @@ import TestCase,{associateTestCase} from './models/testCasesModel.js';
 import { syncTestCaseTable } from './models/testCasesModel.js';
 import { associateBugReport, syncBugReportTable } from './models/bugReportModel.js';
 import Epic,{associateEpic} from './models/epicModel.js'
+import ReAssign, { associateReAssign, syncReAssignTable } from './models/reAssignModel.js';
+import BugReport from './models/bugReportModel.js'
 
 dotenv.config();
 
 const app = express();
+app.use(cookieParser())
 
 app.use(cors({
-    origin: 'http://localhost:5173'
+    origin: 'http://localhost:5173',
+    credentials: true,
+    exposedHeaders: ["set-cookie"],
 }));
+
+app.use(
+    session({
+      secret: "your_session_secret",
+      resave: false,
+      saveUninitialized: false,
+    })
+  );
+  
 
 app.use(express.json());
 
@@ -47,14 +64,12 @@ const syncModels = async () => {
         await sequelize.sync();
         console.log('Database models synced successfully');
 
-       
-       
         associateTask({ Project, User , TestCase,Epic });
         associateProject({ Task }); 
         associateTestCase({ Task });
-
         associateBugReport({ TestCase, Task, User });
         associateEpic({ Project }); 
+        associateReAssign({ Task, User, BugReport,Project });
        
     } catch (error) {
         console.error('Error syncing models:', error);
@@ -64,6 +79,7 @@ const syncModels = async () => {
 const initializeDatabase = async () => {
     await syncTestCaseTable();
     await syncBugReportTable();
+    await syncReAssignTable();
   };
   
   initializeDatabase();

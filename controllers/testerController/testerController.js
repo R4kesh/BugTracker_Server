@@ -3,6 +3,7 @@ import Project from '../../models/projectModel.js'
 import User from '../../models/suserModel.js';
 import TestCase from '../../models/testCasesModel.js';
 import BugReport from '../../models/bugReportModel.js'
+import ReAssign from '../../models/reAssignModel.js';
 import { Op } from 'sequelize'; 
 
 
@@ -158,7 +159,7 @@ export const updateBugReport  = async (req, res) => {
       testerId,
       fileLink:filePaths
     });
-    // console.log('resui',newBugReport);
+    
 
     return res.status(201).json({
       message: 'Bug report created successfully',
@@ -242,3 +243,28 @@ export const editTesterProfile=async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 };
+
+export const listReassigned= async(req,res)=>{
+  try {
+    console.log('data');
+
+    const reAssignedTasks = await ReAssign.findAll({
+      include: [
+        { model: Task, as: 'task', attributes: ['TaskName','description','status'] },
+        { model: Project, as: 'project', attributes: ['name'] },
+        { model: User, as: 'tester', attributes: ['name'] },
+        { model: User, as: 'previousDeveloper', attributes: ['name'] },
+        { model: User, as: 'reassignedTo', attributes: ['name'] },
+        { model: BugReport, as: 'bugReport', attributes: ['severity','steps','fileLink'] },
+      ],
+    });
+
+    console.log('resa',reAssignedTasks);
+
+    
+    res.json(reAssignedTasks);
+    
+  } catch (error) {
+    
+  }
+}
