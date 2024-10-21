@@ -7,8 +7,9 @@ import { Op } from 'sequelize';
 
 export const addProject = async (req, res) => {
     try {
+console.log("ok");
 
-        const { projectName, projectDescription, startDate, projectStatus } = req.body;
+        const { projectName, projectDescription, startDate, projectStatus, completionDate } = req.body;
         
   if (!projectName || !projectDescription || !startDate || !projectStatus) {
     return res.status(400).json({ message: 'All fields are required.' });
@@ -18,6 +19,7 @@ export const addProject = async (req, res) => {
       name: projectName,
       description: projectDescription,
       startDate,
+      completionDate,
       status: projectStatus,
     });
 
@@ -27,7 +29,7 @@ export const addProject = async (req, res) => {
     res.status(201).json({ message: 'Project created successfully!', project: newProject });
         
     } catch (error) {
-        console.log(error)
+        console.log(error.message)
     }
 }
 

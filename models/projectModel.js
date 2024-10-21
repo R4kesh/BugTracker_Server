@@ -16,6 +16,10 @@ const Project = db.define('Project', {
       type: DataTypes.DATE,
       allowNull: false,
     },
+    completionDate: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
     status: {
       type: DataTypes.ENUM('not-started', 'in-progress', 'completed', 'on-hold'),
       allowNull: false,
@@ -32,11 +36,12 @@ const Project = db.define('Project', {
 
   const syncProjectTable = async () => {
     try {
-      await Project.sync();
+      await Project.sync({alter: true});
       console.log('Project table created or exists already');
     } catch (error) {
       console.error('Error creating project table:', error);
-    }
+    } 
   };
   
   syncProjectTable();
+      
