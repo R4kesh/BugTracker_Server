@@ -245,7 +245,7 @@ export const userProfile = async (req, res) => {
       where: { id: Id },
     });
   
-    
+
     // Send the user data as JSON response
     res.json(user);
   } catch (error) {
