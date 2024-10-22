@@ -73,6 +73,14 @@ status: {
     type: DataTypes.STRING(1000),
     allowNull: true,
 },
+link: {
+    type: DataTypes.STRING,
+    allowNull: true, // Set this to false if the link is required
+},
+fileLink: { 
+    type: DataTypes.JSON, 
+    allowNull: true, // Set this to false if file link is required
+},
    
 });
 

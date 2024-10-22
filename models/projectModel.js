@@ -1,3 +1,4 @@
+
 import { DataTypes } from 'sequelize';
 import db from '../config/db.js';
 
@@ -13,6 +14,10 @@ const Project = db.define('Project', {
       allowNull: false,
     },
     startDate: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
+    completionDate: {
       type: DataTypes.DATE,
       allowNull: false,
     },
@@ -32,11 +37,12 @@ const Project = db.define('Project', {
 
   const syncProjectTable = async () => {
     try {
-      await Project.sync();
+      await Project.sync({alter:true});
       console.log('Project table created or exists already');
     } catch (error) {
       console.error('Error creating project table:', error);
-    }
+    } 
   };
   
   syncProjectTable();
+      
