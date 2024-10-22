@@ -13,7 +13,8 @@ import {
     assignedListStatus,
     addModules,
     listingEpic,
-    getEpicName,editEpic
+    getEpicName,editEpic,
+    updateProject
 } from "../controllers/projectController/projectController.js";
 import { validateToken } from "../middlewares/validateToken.js";
 const router = express.Router();
@@ -22,6 +23,7 @@ router.post("/add", validateToken, addProject);
 router.get("/display", validateToken, displayProject);
 router.get("/getProjectName/:id", validateToken, getProjectName);
 router.get("/getEpicName/:id", validateToken, getEpicName);
+router.put('/updateProject/:id',updateProject)
 router.put("/updateEpic/:id",editEpic)
 
 router.post("/task/create", upload.array('files', 5), validateToken, taskCreation);
