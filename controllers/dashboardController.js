@@ -459,6 +459,11 @@ export const trackHistory= async (req, res) => {
         },
         {
           model: User,
+          as: 'reassignedTo',  // Fetch the reassigned user
+          attributes: ['name'],  // Fetch reassigned user's name
+        },
+        {
+          model: User,
           as: 'tester',
           attributes: ['name'],  // Fetch tester name
         },
@@ -468,7 +473,7 @@ export const trackHistory= async (req, res) => {
           attributes: ['fileLink'],  // Fetch bug report details
         },
       ],
-      attributes: ['status', 'reassignId', 'severity'],  // Select relevant ReAssign fields
+      attributes: ['status', 'reassignId', 'severity', 'reassignDate'],  // Select relevant ReAssign fields
     });
 
     console.log('details',reassignDetails);
