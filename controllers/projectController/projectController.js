@@ -73,11 +73,44 @@ export const getEpicName = async (req, res) => {
     }
 };
 
+export const editEpic=async(req,res)=>{
+    try {
+        const { id } = req.params;
+  const { name, description, status } = req.body;
+  const epic = await Epic.findByPk(id); // Assuming you're using Sequelize
+
+    if (!epic) {
+      return res.status(404).json({ error: 'Epic not found' });
+    }
+
+    // Update the epic's details
+    await epic.update({ name, description, status });
+
+    res.status(200).json({ message: 'Epic updated successfully' });
+        
+    } catch (error) {
+        console.error('Error updating epic:', error);
+    res.status(500).json({ error: 'An error occurred while updating the epic' });
+        
+    }
+}
 export const taskCreation = async (req, res) => {
     try {
-        console.log("re", req.body);
 
-        const { projectName, taskName, description, projectId, epicId, userStory } = req.body;
+
+ 
+    const { projectName, taskName, description, projectId, epicId, userStory, link } = req.body;
+
+    const files = req.files;
+
+    // If there are files, store their file paths
+    let filePaths = [];
+    if (files) {
+      filePaths = files.map((file) => {
+        return `/uploads/${file.filename}`;
+      });
+    }
+  
         const newTask = await Task.create({
             projectName,
             taskName,
@@ -85,12 +118,15 @@ export const taskCreation = async (req, res) => {
             projectId,
             epicId,
             userStory,
-            assigned: null,
-            starting: null,
-            deadline: null,
-        });
-
-        res.status(201).json(newTask);
+            link,          
+            fileLink:filePaths,  
+            assigned: null, 
+            starting: null, 
+            deadline: null, 
+          });
+          console.log('result',newTask);
+      
+          res.status(201).json(newTask);
     } catch (error) {
         console.error("Error creating task:", error);
         res.status(500).json({ error: "Failed to create task" });
