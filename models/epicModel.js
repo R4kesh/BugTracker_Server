@@ -30,6 +30,11 @@ const Epic = db.define('Epic', {
     allowNull: true,
     defaultValue: 'not started',
   },
+  isDeleted: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+    defaultValue: false,  
+  },
 });
 
 export const associateEpic = (models) => {
