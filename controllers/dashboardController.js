@@ -41,6 +41,7 @@ try {
     },
   });
 
+
   res.status(200).json(users);
   
 } catch (error) {
@@ -52,6 +53,7 @@ try {
 export const approveUser = async (req, res) => {
   try {
     const userId = req.params.id;
+    console.log('userid',userId);
 
     const updatedUser = await User.update(
       { isApproved: true }, 

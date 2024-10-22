@@ -13,7 +13,7 @@ const router = express.Router();
 
 router.get('/dashboard_count',validateToken,getDasboardCount);
 router.get('/requested_user',validateToken,requestedUser)
-router.put('/approve_user/:id',validateToken,approveUser)
+router.put('/approve_user/:id',approveUser)
 router.get('/usermanagement',validateToken,listUsers)
 router.put('/usermanagement/block_unblock/:id',validateToken,blockUnblockUser)
 router.get('/project_counts',validateToken, getProjectCounts);
