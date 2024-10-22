@@ -13,6 +13,7 @@ import {
     addModules,
     listingEpic,
     getEpicName,
+    deletetask,
 } from "../controllers/projectController/projectController.js";
 import { validateToken } from "../middlewares/validateToken.js";
 const router = express.Router();
@@ -32,5 +33,7 @@ router.patch("/tasks/assignedlist/:taskId", validateToken, assignedListStatus);
 
 router.post("/addModules", validateToken, addModules);
 router.get("/listEpic", validateToken, listingEpic);
+
+router.delete("task/delete/:id",validateToken,deletetask)
 
 export default router;

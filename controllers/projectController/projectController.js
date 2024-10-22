@@ -131,6 +131,19 @@ export const taskModalData = async (req, res) => {
     }
 };
 
+export const deletetask = async (req, res) => {
+    console.log("ok");
+    
+    const {id} = req.params
+    console.log(id);
+    try {
+        
+    } catch (error) {
+        
+    }
+    
+}
+
 export const getroles = async (req, res) => {
     try {
         const roles = await User.findAll({});
