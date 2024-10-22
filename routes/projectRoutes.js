@@ -1,4 +1,5 @@
 import express from "express";
+import { upload } from "../middlewares/fileUpload.js";
 import {
     addProject,
     displayProject,
@@ -14,6 +15,7 @@ import {
     listingEpic,
     getEpicName,
     deletetask,
+    editEpic
 } from "../controllers/projectController/projectController.js";
 import { validateToken } from "../middlewares/validateToken.js";
 const router = express.Router();
@@ -22,7 +24,9 @@ router.post("/add", validateToken, addProject);
 router.get("/display", validateToken, displayProject);
 router.get("/getProjectName/:id", validateToken, getProjectName);
 router.get("/getEpicName/:id", validateToken, getEpicName);
-router.post("/task/create", validateToken, taskCreation);
+router.put("/updateEpic/:id",editEpic)
+
+router.post("/task/create", upload.array('files', 5), validateToken, taskCreation);
 router.get("/task/getAll/:epicId", validateToken, taskList);
 router.get("/task/getModalData", validateToken, taskModalData);
 router.get("/task/assign/roles", validateToken, getroles);
