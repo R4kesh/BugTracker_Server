@@ -179,7 +179,7 @@ export const previewTask= async (req, res) => {
 
   
   const {id}=req.params
-  console.log('epic',id);
+
   
   try {
     const tasks = await Task.findAll({
@@ -201,7 +201,7 @@ export const previewTask= async (req, res) => {
         
       ],
     });
-    console.log('tsss',tasks);
+   
 
     // Map the results to include the necessary fields
     const formattedTasks = tasks.map(task => ({
@@ -217,7 +217,7 @@ export const previewTask= async (req, res) => {
       status: task.status,
     }));
 
-    console.log('fills',formattedTasks);
+
 
     res.json(formattedTasks);
   } catch (error) {
@@ -270,7 +270,7 @@ export const editUserProfile=async (req, res) => {
 
 
 export const reAssign=async (req, res) => {
-  console.log('req.body-11',req.body);
+
   try {
     const {
       reassignId,
@@ -305,7 +305,7 @@ export const reAssign=async (req, res) => {
       previousDeveloperId,
       reassignedToId,
     });
-    console.log('reassiqqqqq',newReassign);
+    
 
     return res.status(201).json({ message: 'Reassignment data saved successfully', data: newReassign });
     
@@ -399,7 +399,7 @@ res.json(tasks);
  export const trackHistoryReassign=async (req, res) => {
   try {
     const {id}=req.params
-    console.log('par',id);
+
     const reAssignedTasks = await ReAssign.findAll({
       where: { reassignedToId: id }, 
       include: [
@@ -410,7 +410,7 @@ res.json(tasks);
         { model: User, as: 'previousDeveloper' }
       ]
     });
-    console.log('res',reAssignedTasks);
+   
     res.json(reAssignedTasks);
   
 
@@ -438,5 +438,49 @@ export const reAssignCount=async (req, res) => {
   } catch (error) {
     console.error('Error fetching reassigned task count:', error);
     res.status(500).json({ error: 'Internal Server Error' });
+  }
+}
+
+export const trackHistory= async (req, res) => {
+  try {
+    const { id } = req.params;
+    const reassignDetails = await ReAssign.findAll({
+      where: { taskId:id },  // Match taskId
+      include: [
+        {
+          model: Task,
+          as: 'task',
+          attributes: ['taskName'],
+        },
+        {
+          model: User,
+          as: 'previousDeveloper',
+          attributes: ['name'],  // Fetch previous developer name
+        },
+        {
+          model: User,
+          as: 'tester',
+          attributes: ['name'],  // Fetch tester name
+        },
+        {
+          model: BugReport,
+          as: 'bugReport',
+          attributes: ['fileLink'],  // Fetch bug report details
+        },
+      ],
+      attributes: ['status', 'reassignId', 'severity'],  // Select relevant ReAssign fields
+    });
+
+    console.log('details',reassignDetails);
+
+    if (!reassignDetails) {
+      return res.status(404).json({ message: 'Task not found' });
+    }
+
+    res.status(200).json(reassignDetails);
+    
+  } catch (error) {
+    console.error('Error fetching reassign details:', error);
+    res.status(500).json({ message: 'Server error' });
   }
 }
