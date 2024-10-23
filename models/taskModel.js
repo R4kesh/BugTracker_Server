@@ -1,10 +1,10 @@
-import { DataTypes } from 'sequelize';
-import db from '../config/db.js';
-import Project from './projectModel.js'
-import User from './suserModel.js'
-import Epic from './epicModel.js';
+import { DataTypes } from "sequelize";
+import db from "../config/db.js";
+import Project from "./projectModel.js";
+import User from "./suserModel.js";
+import Epic from "./epicModel.js";
 
-const Task = db.define('Task', {
+const Task = db.define("Task", {
     projectName: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -21,16 +21,16 @@ const Task = db.define('Task', {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-            model: Project, 
-            key: 'id',
+            model: Project,
+            key: "id",
         },
     },
-    epicId: {  
+    epicId: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
             model: Epic,
-            key: 'id',
+            key: "id",
         },
     },
     assigned: {
@@ -38,10 +38,10 @@ const Task = db.define('Task', {
         allowNull: true,
         references: {
             model: User,
-            key: 'id',
+            key: "id",
         },
     },
-    
+
     starting: {
         type: DataTypes.DATE,
         allowNull: true,
@@ -51,73 +51,68 @@ const Task = db.define('Task', {
         allowNull: true,
     },
     isVerifiedByAdmin: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: false, 
-      allowNull: false,
-  },
-  isVerifiedByUser: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: false, 
-    allowNull: false,
-},
-  isCompleted: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: false, 
-    allowNull: false,
-},
-status: {
-    type: DataTypes.ENUM('pending', 'started', 'in-Progress', 'completed'),
-    allowNull: true,
-  },
-  userStory: { 
-    type: DataTypes.STRING(1000),
-    allowNull: true,
-},
-link: {
-    type: DataTypes.STRING,
-    allowNull: true, // Set this to false if the link is required
-},
-fileLink: { 
-    type: DataTypes.JSON, 
-    allowNull: true, // Set this to false if file link is required
-},
-   
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+        allowNull: false,
+    },
+    isVerifiedByUser: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+        allowNull: false,
+    },
+    isCompleted: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+        allowNull: false,
+    },
+    status: {
+        type: DataTypes.ENUM("pending", "started", "in-Progress", "completed"),
+        allowNull: true,
+    },
+    userStory: {
+        type: DataTypes.STRING(1000),
+        allowNull: true,
+    },
+    link: {
+        type: DataTypes.STRING,
+        allowNull: true, // Set this to false if the link is required
+    },
+    fileLink: {
+        type: DataTypes.JSON,
+        allowNull: true, // Set this to false if file link is required
+    },
+    isDeleted: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+    }    
 });
 
 export const associateTask = (models) => {
-    
     if (models.Project) {
-    Task.belongsTo(models.Project, { foreignKey: 'projectId' });
-   
+        Task.belongsTo(models.Project, { foreignKey: "projectId" });
     }
     if (models.User) {
-      
-    Task.belongsTo(models.User, { foreignKey: 'assigned', as: 'assignedUser' });
+        Task.belongsTo(models.User, { foreignKey: "assigned", as: "assignedUser" });
     }
-    if (models.Epic) {  
-        Task.belongsTo(models.Epic, { foreignKey: 'epicId' });
+    if (models.Epic) {
+        Task.belongsTo(models.Epic, { foreignKey: "epicId" });
     }
 };
 
 export default Task;
 
-
-
 const syncTables = async () => {
-  try {
-    await Task.sync({alter:true});
-    
-      await Project.sync();
-      await User.sync();
-      await Epic.sync();
+    try {
+        await Task.sync({ alter: true });
 
+        await Project.sync();
+        await User.sync();
+        await Epic.sync();
 
-  
-      console.log('All tables synced successfully');
-  } catch (error) {
-      console.error('Error syncing tables:', error);
-  }
+        console.log("All tables synced successfully");
+    } catch (error) {
+        console.error("Error syncing tables:", error);
+    }
 };
 
 syncTables();
-

@@ -119,7 +119,7 @@ export const taskCreation = async (req, res) => {
             epicId,
             userStory,
             link,          
-            fileLink:filePaths,  
+            fileLink:filePaths,   
             assigned: null, 
             starting: null, 
             deadline: null, 
@@ -138,7 +138,9 @@ export const taskList = async (req, res) => {
         const { epicId } = req.params;
 
         const tasks = await Task.findAll({
-            where: { epicId },
+            where: { epicId,
+                isDeleted: false
+             },
             include: [
                 {
                     model: User,
@@ -167,18 +169,30 @@ export const taskModalData = async (req, res) => {
     }
 };
 
-export const deletetask = async (req, res) => {
-    console.log("ok");
-    
-    const {id} = req.params
-    console.log(id);
+export const deleteTask = async (req, res) => {
+    const { id } = req.params; 
+
     try {
-        
+        const task = await Task.findByPk(id);
+
+        if (!task) {
+            return res.status(404).json({ message: "Task not found" }); 
+        }
+
+        if (task.isDeleted) {
+            return res.status(400).json({ message: "Task has already been deleted" }); 
+        }
+
+        task.isDeleted = true;
+        await task.save(); 
+
+        return res.status(200).json({ message: "Task soft deleted successfully" });
     } catch (error) {
-        
+        console.error("Error soft deleting task:", error.message); 
+        return res.status(500).json({ message: "Internal server error while deleting task" }); 
     }
-    
-}
+};
+
 export const editTask = async (req, res) => {
     console.log("ok");
     
