@@ -303,3 +303,32 @@ export const listingEpic = async (req, res) => {
         res.status(500).json({ error: "Internal Server Error" });
     }
 };
+
+export const updateProject = async (req, res) => {
+    const { id } = req.params;
+    const { name, description, startDate, completionDate, status } = req.body;
+    console.log('ID received in request:', startDate,completionDate);  // Debugging
+  
+    try {
+        const project = await Project.findByPk(id);
+        console.log('project',project);
+      if (project) {
+        project.name = name;
+        project.description = description;
+        project.startDate = startDate;
+        project.completionDate = completionDate;
+        project.status = status;
+  
+        await project.save();
+        res.status(200).json(project);
+      } else {
+        res.status(404).json({ error: 'Project not found' });
+      }
+    } catch (error) {
+    //   res.status(500).json({ error: 'Failed to update project' });
+    console.log('error',error);
+    
+    }
+  };
+  
+  
