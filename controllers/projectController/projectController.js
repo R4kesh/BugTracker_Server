@@ -179,6 +179,16 @@ export const deletetask = async (req, res) => {
     }
     
 }
+export const editTask = async (req, res) => {
+    console.log("ok");
+    
+    try {
+        
+    } catch (error) {
+        
+    }
+    
+}
 
 export const getroles = async (req, res) => {
     try {

@@ -15,7 +15,8 @@ import {
     listingEpic,
     getEpicName,
     deletetask,
-    editEpic
+    editEpic,
+    editTask,
 } from "../controllers/projectController/projectController.js";
 import { validateToken } from "../middlewares/validateToken.js";
 const router = express.Router();
@@ -24,9 +25,9 @@ router.post("/add", validateToken, addProject);
 router.get("/display", validateToken, displayProject);
 router.get("/getProjectName/:id", validateToken, getProjectName);
 router.get("/getEpicName/:id", validateToken, getEpicName);
-router.put("/updateEpic/:id",editEpic)
+router.put("/updateEpic/:id", editEpic);
 
-router.post("/task/create", upload.array('files', 5), validateToken, taskCreation);
+router.post("/task/create", upload.array("files", 5), validateToken, taskCreation);
 router.get("/task/getAll/:epicId", validateToken, taskList);
 router.get("/task/getModalData", validateToken, taskModalData);
 router.get("/task/assign/roles", validateToken, getroles);
@@ -38,6 +39,7 @@ router.patch("/tasks/assignedlist/:taskId", validateToken, assignedListStatus);
 router.post("/addModules", validateToken, addModules);
 router.get("/listEpic", validateToken, listingEpic);
 
-router.delete("task/delete/:id",validateToken,deletetask)
+router.delete("/task/delete/:id", validateToken, deletetask);
+router.post("/task/edit", validateToken, editTask);
 
 export default router;
