@@ -58,7 +58,7 @@ export const loginUser = async (req, res) => {
             };
 
             // Generate token
-            const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
+            const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1d' });
             console.log('jw',token);
 
                 res.cookie("accessToken", token, {
@@ -125,7 +125,7 @@ export const loginUser = async (req, res) => {
           };
     
           // Generate token
-          const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
+          const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1d' });
           console.log('jw',token);
 
           res.cookie("accessToken", token, {
